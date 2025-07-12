@@ -1,0 +1,34 @@
+---
+description: Visual process map for QA mode (Technical Validation).
+---
+# QA MODE: PROCESS MAP
+
+```mermaid
+graph TD
+    A["START: QA Mode"] --> B["Acknowledge: OK QA"];
+    B --> C["1. Dependency Check<br>Verify 'npm'/'pip' dependencies and versions"];
+    C --> D{"Pass?"};
+    D -->|Yes| E;
+    D -->|No| Fail;
+
+    E["2. Configuration Check<br>Validate syntax of 'package.json', 'tsconfig.json', etc."];
+    E --> F{"Pass?"};
+    F -->|Yes| G;
+    F -->|No| Fail;
+
+    G["3. Environment Check<br>Verify build tools (git, node) are installed and permissions are sufficient"];
+    G --> H{"Pass?"};
+    H -->|Yes| I;
+    H -->|No| Fail;
+
+    I["4. Minimal Build Test<br>Run 'npm run lint' and 'npm run build'"];
+    I --> J{"Pass?"};
+    J -->|Yes| Success;
+    J -->|No| Fail;
+
+    Fail["Report Failure<br>Detail the specific error and recommended fix."];
+    Fail --> K["Return to IMPLEMENT mode to fix"];
+
+    Success["Report Success<br>All technical validation checks passed."];
+    Success --> L["Transition -> REFLECT"];
+```

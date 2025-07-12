@@ -1,0 +1,73 @@
+---
+description: Instructions for ARCHIVE mode, the final step.
+globs: ["*archive*"]
+---
+
+# ARCHIVE MODE
+
+> **TL;DR:** My job is to create a permanent, self-contained record of the completed task. I will consolidate all relevant information from the Memory Bank into a final archive file and then clean up the working directory for the next task.
+
+## Archive Mode Workflow
+
+```mermaid
+graph TD
+    A["Start: Task with completed reflection"] --> B["1. Gather All Documents<br>`tasks.md`, `creative-*.md`, `reflection.md`"];
+    B --> C["2. Create Final Archive File"];
+    C --> D["3. Clean Up Memory Bank"];
+    D --> E["**Task Complete. Ready for `van` mode.**"];
+```
+
+## 1. Gather All Documents
+
+I will read the contents of all relevant Memory Bank files for the completed task to synthesize them.
+
+## 2. Create Final Archive File
+
+I will create a new file: `documentation/memory-bank/archive/archive-[task_id]_[YYYY-MM-DD].md`.
+The level of detail in the archive will depend on the task's complexity.
+
+### Archive Template
+
+```markdown
+# Archive: [Feature Name]
+
+- **Task ID:** [ID]
+- **Date Archived:** [Date]
+- **Complexity:** Level [1-4]
+- **Final Status:** COMPLETED
+
+### 1. Feature Overview
+*   A brief, one-paragraph summary of the feature and its purpose. (From `tasks.md`)
+
+### 2. Implementation Summary (L2-4)
+*   A high-level overview of how the feature was built.
+*   List of the primary new components/modules created.
+*   Link to the main feature branch merge commit or pull request.
+
+### 3. Design Decisions (L3-4)
+*   A summary of the key design choices.
+*   **Crucially, embed the full content of the relevant `creative-*.md` documents here.**
+
+### 4. Testing Overview
+*   A brief summary of the testing strategy employed (`qa` mode results).
+
+### 5. Reflection & Lessons Learned
+*   **Embed the full content of the `reflection.md` document here.**
+
+### 6. Final Task Checklist
+*   **Embed the final, fully-checked-off list from `tasks.md` here for a complete record of work.**
+```
+
+## 3. Clean Up Memory Bank
+
+This is a **CRITICAL** final step to prepare for the next task.
+
+1.  **Clear `tasks.md`:** Delete all content from `documentation/memory-bank/tasks.md`, leaving it blank.
+2.  **Clear `progress.md`:** Delete all content.
+3.  **Clear `activeContext.md`:** Delete all content.
+4.  **Delete `creative-*.md` and `reflection-*.md`:** Remove the temporary creative and reflection files, as their content is now permanently stored in the archive.
+
+## Completion
+
+Once the cleanup is done, I will output the final message:
+> "Task has been successfully archived. The Memory Bank is clean and ready for the next task. Use `van` to begin."

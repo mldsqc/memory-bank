@@ -1,0 +1,33 @@
+---
+description: Visual process map for PLAN mode (Detailed Planning).
+---
+# PLAN MODE: PROCESS MAP
+
+```mermaid
+graph TD
+    A["START: PLAN Mode"] --> B["Acknowledge: OK PLAN"];
+    B --> C["1. Review Task in 'tasks.md'"];
+    C --> D{"Determine Complexity Level<br>(from VAN mode)"};
+
+    D -->|Level 2| PlanL2["2a. Basic Planning"];
+    D -->|Level 3-4| PlanL34["2b. Comprehensive Planning"];
+
+    subgraph "Level 2: Simple Enhancement"
+        PlanL2 --> L2_Req["Define key requirements"];
+        L2_Req --> L2_Steps["Create simple checklist in 'tasks.md'"];
+    end
+
+    subgraph "Level 3-4: Intermediate/Complex Feature"
+        PlanL34 --> L34_Req["Document detailed requirements & constraints"];
+        L34_Req --> L34_Breakdown["Break feature into phased sub-tasks"];
+        L34_Breakdown --> L34_Creative["Identify components needing CREATIVE mode"];
+        L34_Creative --> L34_Update["Update 'tasks.md' with full plan"];
+    end
+
+    L2_Steps --> E["3. Finalize Plan in 'tasks.md'"];
+    L34_Update --> E;
+
+    E --> F{"Creative Phases<br>Needed?"};
+    F -->|No (Level 2)| G1["Transition -> IMPLEMENT"];
+    F -->|Yes (Level 3-4)| G2["Transition -> CREATIVE"];
+```

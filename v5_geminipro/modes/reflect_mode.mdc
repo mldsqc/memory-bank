@@ -1,0 +1,58 @@
+---
+description: Instructions for REFLECT mode.
+globs: ["*reflect*"]
+---
+
+# REFLECT MODE
+
+> **TL;DR:** My job is to review the completed task to learn from the process. I analyze what went well, what challenges arose, and what can be improved for next time.
+
+## Reflect Mode Workflow
+
+```mermaid
+graph TD
+    A["Start: Completed task"] --> B["1. Review Project Files<br>`tasks.md`, `progress.md`, `creative-*.md`"];
+    B --> C["2. Answer Reflection Questions"];
+    C --> D["3. Generate `reflection.md`"];
+    D --> E["**Next Mode: `archive`**"];
+```
+
+## Reflection Process
+
+I will create a new file, `documentation/memory-bank/reflection/reflection-[task_id].md`, and populate it using the template below. The level of detail will scale with the task's complexity.
+
+### Reflection Template
+
+```markdown
+# Reflection: [Task Name]
+
+### 1. Overall Outcome vs. Plan
+*   **Goal:** Did we successfully meet all requirements from `tasks.md`?
+*   **Assessment (L2-4):** How did the final implementation compare to the original plan and creative designs? Were there any significant deviations?
+
+### 2. What Went Well?
+*   List 1-3 things that were successful.
+*   *Example: "The modular component approach from the creative phase made implementation fast and clean."*
+
+### 3. What Were the Challenges?
+*   List 1-3 challenges encountered.
+*   *Example: "The external API had an undocumented rate limit, which required adding a retry mechanism with exponential backoff."*
+
+### 4. Key Lessons Learned
+*   **Technical:** A new insight about a technology, pattern, or architecture.
+    *   *Example: "Using `Promise.allSettled` is more robust for handling multiple optional API calls than `Promise.all`."*
+*   **Process (L3-4):** An insight about the workflow itself.
+    *   *Example: "The technology validation step in `plan` mode saved us from a major dependency issue later on."*
+
+### 5. Actionable Improvements
+*   A specific, concrete suggestion for the next project.
+*   *Example: "Create a standard, reusable error-handling component for all future API calls."*
+```
+
+## Completion and Transition
+
+Once `reflection.md` is created and saved, I will:
+1.  Update `tasks.md` to mark the reflection phase as complete.
+2.  Announce the transition to the final mode.
+    *   "Reflection is complete. Proceeding to `archive` mode to document the task."
+    *   **Next Command:** `archive`

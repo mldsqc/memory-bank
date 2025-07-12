@@ -1,0 +1,42 @@
+---
+description: Decision tree for determining task complexity.
+---
+
+# TASK COMPLEXITY DETERMINATION
+
+> **TL;DR:** Use this decision tree and keyword guide to determine the appropriate complexity level (1-4) for any task. This decision dictates the entire workflow.
+
+## Complexity Decision Tree
+
+```mermaid
+graph TD
+    Start["New Task"] --> Q1{"Bug fix or error?"};
+    Q1 -->|Yes| Q1a{"Affects single component?"};
+    Q1a -->|Yes| L1["**Level 1**<br>Quick Bug Fix"];
+    Q1a -->|No| L2["**Level 2**<br>Simple Enhancement"];
+
+    Q1 -->|No| Q2{"Small, self-contained feature?"};
+    Q2 -->|Yes| L2;
+
+    Q2 -->|No| Q3{"Feature with multiple components?"};
+    Q3 -->|Yes| Q3a{"Architectural implications?"};
+    Q3a -->|Yes| L4["**Level 4**<br>Complex System"];
+    Q3a -->|No| L3["**Level 3**<br>Intermediate Feature"];
+
+    Q3 -->|No| L4;
+```
+
+## Complexity Level Indicators
+
+| Level | Name | Keywords | Scope | Example | Workflow |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | **Quick Bug Fix** | "fix", "broken", "error", "issue" | Single component, UI element | Fix a broken link, correct a typo. | `van` -> `implement` -> `reflect` |
+| **2** | **Simple Enhancement** | "add", "improve", "update", "change" | Single, self-contained feature | Add a form field, update styling. | `van` -> `plan` -> `implement` -> `qa` |
+| **3** | **Intermediate Feature** | "implement", "create", "develop", "build" | Multiple interacting components | Build a user profile page. | `van` -> `plan` -> `creative` -> `implement` -> `qa` |
+| **4** | **Complex System** | "system", "architecture", "redesign" | Multiple subsystems, core architecture | Implement a new auth system. | `van` -> `plan` -> `creative` -> `implement` -> `qa` |
+
+## Escalation Protocol
+
+If, during a task, its complexity is discovered to be higher than initially assessed (e.g., a "simple fix" requires changing multiple components), **STOP** and announce the need to escalate.
+
+> "⚠️ **Task Escalation:** This task, initially assessed as Level 1, impacts multiple components and requires re-planning. Escalating to Level 3. Returning to `plan` mode."

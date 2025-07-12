@@ -1,0 +1,80 @@
+---
+description: Instructions for PLAN mode.
+globs: ["*plan*"]
+---
+
+# PLAN MODE
+
+> **TL;DR:** My job is to break down a complex task (Level 2-4) into a detailed, step-by-step implementation plan. This plan will be the source of truth for the `implement` and `creative` modes.
+
+## Plan Mode Workflow
+
+```mermaid
+graph TD
+    A["Start: Task from `van` mode"] --> B["1. Define Requirements & Components"];
+    B --> C["2. Technology Validation"];
+    C --> D["3. Create Implementation Steps"];
+    D --> E{"4. Identify Need for<br>Creative Design?"};
+    E --> |Yes| F["Flag for `creative` mode"];
+    E --> |No| G["Plan is purely technical"];
+    F & G --> H["**Final Output:<br>Detailed `tasks.md`**"];
+    H --> I["**Next Mode:<br>`creative` or `implement`**"]
+```
+
+## 1. Define Requirements & Components
+
+I will flesh out the task by:
+-   **Listing User Stories/Requirements:** What must the feature do to be considered complete?
+-   **Identifying Components:** Which files, classes, or modules will be created or modified?
+-   **Mapping Dependencies:** How do the components interact with each other and the existing system?
+
+## 2. Technology Validation (Mandatory Gate)
+
+If new technologies (libraries, frameworks) are required, I must validate them **before** finalizing the plan.
+1.  **Research:** Use available tools to research the technology.
+2.  **Proof of Concept (PoC):** Create a minimal "Hello World" to verify the build process, dependencies, and configuration.
+3.  **Document:** Record the chosen stack and PoC findings in `techContext.md`.
+
+## 3. Create Implementation Steps
+
+I will update `tasks.md` with a detailed, hierarchical checklist.
+
+**Example `tasks.md` for a Level 3 Feature:**
+```markdown
+# Feature: User Profile Page
+
+## Requirements
+- [ ] Users can view their email and username.
+- [ ] Users can upload a new profile picture.
+
+## Implementation Plan
+
+### Phase 1: Backend API
+- [ ] Create `GET /api/user/profile` endpoint.
+- [ ] Create `POST /api/user/avatar` endpoint for uploads.
+- [ ] Add unit tests for both endpoints.
+
+### Phase 2: Frontend Component
+- [ ] Create `UserProfile.jsx` component.
+- [ ] Fetch and display user data.
+- [ ] Build the file upload UI.
+- [ ] Add state management for loading/error states.
+```
+
+## 4. Identify Need for Creative Design
+
+For each component, I will assess if the solution is straightforward or requires design work.
+-   **Requires `creative` mode if:**
+    -   The architecture is non-trivial.
+    -   A new, complex UI/UX flow is needed.
+    -   A complex algorithm must be designed.
+-   **Action:** If `creative` is needed, I will add a `[CREATIVE-REQUIRED]` tag to that step in `tasks.md`.
+
+## 5. Transition to Next Mode
+
+*   **If `[CREATIVE-REQUIRED]` tags exist:**
+    *   "Planning is complete. Some components require design work. Proceeding to `creative` mode."
+    *   **Next Command:** `creative`
+*   **If no creative phases are needed:**
+    *   "Planning is complete. The implementation plan is ready. Proceeding to `implement` mode."
+    *   **Next Command:** `implement`

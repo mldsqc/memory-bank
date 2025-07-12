@@ -1,0 +1,135 @@
+---
+description: Consolidated instructions for each operational mode of the system.
+---
+
+# System Mode Instructions
+
+This document provides the specific goals and processes for each mode.
+
+---
+
+## VAN Mode (Initialization & Triage)
+
+**Goal:** Analyze the user's request, set up the environment, and determine the task's complexity to route it to the correct workflow.
+
+**Process:**
+1.  **Acknowledge:** Respond with `OK VAN`.
+2.  **Verify Memory Bank:** Ensure the core `documentation/memory-bank/` structure exists. If not, create it. See [MEMORY_BANK.mdc](mdc:MEMORY_BANK.mdc).
+3.  **Platform Detection:** Identify OS and adapt commands. See [CORE_RULES.mdc](mdc:CORE_RULES.mdc).
+4.  **Complexity Analysis:** Use the decision tree in [SYSTEM_OVERVIEW.mdc](mdc:SYSTEM_OVERVIEW.mdc) to determine the complexity level (1-4).
+5.  **Task Creation:** Create an initial entry for the task in `tasks.md`.
+6.  **Transition:**
+    *   **Level 1:** Proceed directly to IMPLEMENT mode.
+    *   **Level 2-4:** Transition to PLAN mode.
+
+---
+
+## PLAN Mode (Detailed Planning)
+
+**Goal:** Create a comprehensive and actionable implementation plan. The depth of the plan scales with complexity.
+
+**Process:**
+1.  **Acknowledge:** Respond with `OK PLAN`.
+2.  **Review `tasks.md`:** Understand the high-level task.
+3.  **Define Requirements:**
+    *   **Level 2:** List primary requirements and affected components.
+    *   **Level 3-4:** Document detailed functional/non-functional requirements, user stories, and technical constraints.
+4.  **Create Implementation Plan:**
+    *   **Level 2:** Create a simple checklist of steps.
+    *   **Level 3-4:** Break the feature into a phased implementation plan with detailed subtasks, dependencies, and risk mitigation strategies.
+5.  **Identify Creative Needs (Level 3-4):** Flag any components or problems that require architectural, UI/UX, or algorithmic design.
+6.  **Update `tasks.md`:** Populate `tasks.md` with the full, detailed plan.
+7.  **Transition:**
+    *   **Level 2:** Transition to IMPLEMENT mode.
+    *   **Level 3-4:** Transition to CREATIVE mode.
+
+---
+
+## CREATIVE Mode (Design & Exploration)
+
+**Goal:** Explore solutions for complex problems identified in PLAN mode. Produce clear, documented design decisions before implementation begins.
+
+**Process:**
+1.  **Acknowledge:** Respond with `OK CREATIVE`.
+2.  **Review Creative Requirements:** Identify the specific design task from `tasks.md` (e.g., "Design the authentication architecture").
+3.  **Use Optimized Creative Template:** For each design task, create a dedicated `documentation/memory-bank/creative-[feature_name].md` file using the progressive disclosure template.
+    *   **1. Problem:** Define scope, requirements, and constraints.
+    *   **2. Options:** List 2-3 high-level potential solutions.
+    *   **3. Analysis:** Use a comparison table (Performance, Complexity, etc.) to evaluate the options. Add detailed pros/cons on demand.
+    *   **4. Decision:** State the chosen option and provide a clear rationale.
+    *   **5. Implementation Notes:** Provide guidelines, key considerations, and code snippets for the implementation phase.
+4.  **Update `tasks.md`:** Link to the new creative document and summarize the decision.
+5.  **Repeat:** If multiple creative tasks were identified, repeat the process.
+6.  **Transition:** Once all creative tasks are complete, transition to IMPLEMENT mode.
+
+---
+
+## IMPLEMENT Mode (Build & Code)
+
+**Goal:** Systematically build the feature according to the plan in `tasks.md` and the design decisions from CREATIVE mode.
+
+**Process:**
+1.  **Acknowledge:** Respond with `OK IMPLEMENT`.
+2.  **Review Plan:** Read `tasks.md` and any linked `creative-*.md` documents.
+3.  **Execute Systematically:** Follow the implementation plan step-by-step.
+    *   Work on one sub-task at a time.
+    *   Adhere strictly to design decisions and coding standards.
+    *   Write unit and integration tests as you go.
+4.  **Update Progress:**
+    *   Check off completed sub-tasks in `tasks.md`.
+    *   Log significant progress, command outputs, and any minor implementation decisions in `progress.md`.
+5.  **Transition:** Once all implementation tasks in `tasks.md` are complete, transition to QA mode.
+
+---
+
+## QA Mode (Validation)
+
+**Goal:** Perform a series of technical checks to validate the work before final review. This is NOT user-acceptance testing, but a technical sanity check.
+
+**Process:**
+1.  **Acknowledge:** Respond with `OK QA`.
+2.  **Run Validation Checks:**
+    *   **Dependency Check:** Verify all required dependencies are installed and versions are compatible.
+    *   **Configuration Check:** Validate syntax and compatibility of config files (e.g., `package.json`, `tsconfig.json`).
+    *   **Environment Check:** Ensure build tools and necessary permissions are in place.
+    *   **Minimal Build Test:** Run a `lint` and `build` command to ensure the project compiles without errors.
+3.  **Report Results:**
+    *   **On Pass:** Report success and confirm readiness for the next phase.
+    *   **On Fail:** Report the specific error and suggest a fix. Return to IMPLEMENT mode to apply the fix, then re-enter QA mode.
+4.  **Transition:** On successful validation, transition to REFLECT mode.
+
+---
+
+## REFLECT Mode (Review & Learn)
+
+**Goal:** Analyze the completed work to extract key learnings, assess outcomes against goals, and identify areas for improvement.
+
+**Process:**
+1.  **Acknowledge:** Respond with `OK REFLECT`.
+2.  **Review Project:** Read `tasks.md`, `progress.md`, and any `creative-*.md` documents to get a full picture of the work.
+3.  **Document Reflection:** Create a `documentation/memory-bank/reflection-[task_id].md` file.
+    *   **Level 1-2:** Briefly document the solution and any key takeaways.
+    *   **Level 3-4:** Conduct a comprehensive review:
+        *   **What Went Well:** Key successes.
+        *   **Challenges Encountered:** Obstacles and how they were solved.
+        *   **Lessons Learned:** Technical and process insights.
+        *   **Outcome vs. Plan:** Did the result meet the original requirements?
+4.  **Update `tasks.md`:** Mark the reflection step as complete.
+5.  **Transition:** Transition to ARCHIVE mode.
+
+---
+
+## ARCHIVE Mode (Documentation)
+
+**Goal:** Create a final, persistent record of the completed task and clean up the Memory Bank for the next task.
+
+**Process:**
+1.  **Acknowledge:** Respond with `OK ARCHIVE`.
+2.  **Consolidate Documents:** Gather all relevant documents (`tasks.md` plan, `creative-*.md`, `reflection-*.md`).
+3.  **Create Archive File:** Create a single, permanent archive file in `docs/archive/archive-[task_id].md`.
+    *   **Level 1-2:** A simple summary of the issue and solution.
+    *   **Level 3-4:** A comprehensive document including: summary, requirements, final design decisions, implementation overview, and a link to the full reflection.
+4.  **Update Memory Bank:**
+    *   In `tasks.md`, mark the task as fully `COMPLETED & ARCHIVED` and add a link to the archive file.
+    *   Clear the contents of `activeContext.md` and `progress.md` to prepare for the next task.
+5.  **Complete:** Signal that the process is finished and the system is ready for a new task in VAN mode.

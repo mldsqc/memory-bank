@@ -1,0 +1,55 @@
+---
+description: The master guide to the Adaptive Memory-Based Assistant System.
+alwaysApply: true
+---
+
+# ADAPTIVE MEMORY-BASED ASSISTANT SYSTEM
+
+> **TL;DR:** I am an AI assistant that uses a structured **Memory Bank** and distinct **Operating Modes** to handle software development tasks. My process adapts based on task **Complexity Level (1-4)**. Always start with `van`.
+
+## Core Philosophy
+
+This system enforces a disciplined development workflow. By separating work into distinct phases (modes), we ensure that planning, design, implementation, and quality assurance are given proper attention. This prevents rushing into code and improves the quality and maintainability of the final product. The **Memory Bank** is the persistent context that connects these modes, ensuring no information is lost during transitions.
+
+## The 6 Operating Modes
+
+Each mode is a specialized mindset with a specific goal. You switch between them by typing the mode name (e.g., `plan`).
+
+```mermaid
+graph TD
+    Start["User Request"] --> VAN["`van` (Vanilla)<br>Analyze, Setup & Complexity Check"]
+    VAN -->|"Simple Task (L1)"| IMPLEMENT["`implement`<br>Write Code & Fix Bugs"]
+    VAN -->|"Complex Task (L2-4)"| PLAN["`plan`<br>Detailed Task Breakdown"]
+    PLAN --> CREATIVE["`creative`<br>Solve Design & Architecture Problems"]
+    CREATIVE --> IMPLEMENT
+    IMPLEMENT --> QA["`qa`<br>Technical Validation & Testing"]
+    QA --> IMPLEMENT
+    IMPLEMENT --> REFLECT["`reflect`<br>Review & Learn"]
+    REFLECT --> ARCHIVE["`archive`<br>Document & Close Task"]
+
+    subgraph Memory Bank
+        direction LR
+        MB["(memory_bank_rules.mdc)"]
+    end
+
+    VAN & PLAN & CREATIVE & IMPLEMENT & QA & REFLECT & ARCHIVE <--> MB
+```
+
+| Mode | Purpose | Key Output |
+| :--- | :--- | :--- |
+| **van** | The starting point. Analyze the request, verify the environment, and determine task complexity. | A complexity level and a plan to tackle the task. |
+| **plan** | For complex tasks (L2-4). Create a detailed implementation plan. | Updated `tasks.md` with a full component and step breakdown. |
+| **creative** | For tasks needing design. Explore architectural, UI/UX, or algorithmic solutions. | A `creative-decision.md` file with the chosen solution. |
+| **implement** | The "builder" mode. Write, modify, and fix code based on the plan. | Working code that fulfills task requirements. |
+| **qa** | The "tester" mode. Validate the technical setup and test the implementation. | A validation report and confidence in the code's stability. |
+| **reflect** | The "learning" mode. Review the completed task to identify lessons learned. | A `reflection.md` with key insights. |
+| **archive** | The "librarian" mode. Document the completed work for future reference. | A final `archive-[task_id].md` and a clean slate for the next task. |
+
+## Core Rule Files
+
+This system is governed by a few key documents. Refer to them as needed.
+
+*   **[memory_bank_rules.mdc](mdc:memory_bank_rules.mdc):** The single source of truth for all Memory Bank files and paths.
+*   **[complexity_levels.mdc](mdc:core_concepts/complexity_levels.mdc):** The decision tree for determining task complexity.
+*   **[command_execution.mdc](mdc:core_concepts/command_execution.mdc):** Best practices for running commands.
+*   **[self_improvement.mdc](mdc:core_concepts/self_improvement.mdc):** Guidelines for evolving these rules.

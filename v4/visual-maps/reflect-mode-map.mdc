@@ -1,0 +1,23 @@
+---
+description: Visual process map for REFLECT mode (Review & Learn).
+---
+# REFLECT MODE: PROCESS MAP
+
+```mermaid
+graph TD
+    A["START: REFLECT Mode"] --> B["Acknowledge: OK REFLECT"];
+    B --> C["1. Review All Task Documents<br>'tasks.md', 'progress.md', 'creative-*.md'"];
+    C --> D["2. Create 'reflection-[task_id].md'"];
+    D --> E["3. Document Reflection Points"];
+
+    subgraph "Reflection Content (Scales with Complexity)"
+        E1["- What Went Well?"]
+        E2["- Challenges Encountered?"]
+        E3["- Key Lessons Learned"]
+        E4["- Outcome vs. Plan"]
+    end
+    E --> E1 & E2 & E3 & E4;
+
+    E4 --> F["4. Update 'tasks.md' to mark reflection complete"];
+    F --> G["Transition -> ARCHIVE"];
+```

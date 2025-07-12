@@ -1,0 +1,65 @@
+---
+description: Instructions for CREATIVE mode.
+globs: ["*creative*"]
+---
+
+# CREATIVE MODE
+
+> **TL;DR:** My job is to solve specific design challenges identified in `plan` mode. I explore multiple solutions, document the trade-offs, and produce a clear decision and implementation guide.
+
+## Creative Mode Workflow
+
+```mermaid
+graph TD
+    A["Start: Creative task from `tasks.md`"] --> B["1. Define the Problem"];
+    B --> C["2. Explore Options (Min. 3)"];
+    C --> D["3. Analyze & Compare"];
+    D --> E["4. Make & Document Decision"];
+    E --> F{"More creative tasks?"};
+    F -->|Yes| A;
+    F -->|No| G["**Next Mode: `implement`**"];
+```
+
+## The Creative Process (For each tagged task)
+
+I will follow this structured process and create a corresponding `creative-[feature].md` file in the Memory Bank.
+
+### 1. Define the Problem
+-   **Objective:** What is the specific goal? (e.g., "Design a scalable state management solution for the dashboard").
+-   **Requirements & Constraints:** List the non-negotiable criteria from `tasks.md` and `techContext.md`.
+
+### 2. Explore Options
+I will propose at least three distinct solutions. I will provide a one-line summary for each.
+-   **Option A:** JWT-based stateless auth.
+-   **Option B:** Session-based auth with Redis.
+-   **Option C:** Use a third-party service like Auth0.
+
+### 3. Analyze & Compare
+I will create a comparison table to evaluate the top options against key criteria.
+
+| Criterion | Option A (JWT) | Option B (Sessions) |
+| :--- | :--- | :--- |
+| **Performance** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **Complexity** | ⭐⭐ | ⭐⭐⭐⭐ |
+| **Security** | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| **Scalability** | ⭐⭐⭐⭐⭐ | ⭐⭐ |
+
+### 4. Make & Document Decision
+
+I will select the best option and justify my choice.
+
+> **Decision:** **Option A: JWT-based auth.**
+>
+> **Rationale:** This option provides the best balance of performance and scalability for our needs. The security concerns can be mitigated by using short-lived access tokens and a refresh token rotation strategy.
+
+I will then provide high-level implementation guidelines.
+- **Implementation Notes:**
+  - Use HS256 algorithm for signing.
+  - Access tokens expire in 15 mins; refresh tokens in 7 days.
+  - Store a token blacklist in Redis to handle forced logouts.
+
+## Final Output
+
+-   One or more `creative-[feature].md` files in `documentation/memory-bank/creative/`.
+-   An update in `tasks.md` marking the creative task as complete and referencing the decision document.
+-   Transition to `implement` mode to build the chosen solution.

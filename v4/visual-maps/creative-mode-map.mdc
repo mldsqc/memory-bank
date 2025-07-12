@@ -1,0 +1,26 @@
+---
+description: Visual process map for CREATIVE mode (Design & Exploration).
+---
+# CREATIVE MODE: PROCESS MAP
+
+```mermaid
+graph TD
+    A["START: CREATIVE Mode"] --> B["Acknowledge: OK CREATIVE"];
+    B --> C["1. Identify Design Task<br>Read 'tasks.md' for flagged components"];
+    C --> D{"More Creative Tasks?"};
+
+    D -->|Yes| E["2. Select Next Design Task"];
+    E --> F["3. Create 'creative-[feature].md'"];
+    F --> G["4. Follow Progressive Template"];
+    subgraph "Progressive Documentation Template"
+        G1["1. Define PROBLEM"] --> G2["2. List high-level OPTIONS"];
+        G2 --> G3["3. ANALYZE with comparison table"];
+        G3 --> G4["4. Make a clear DECISION with rationale"];
+        G4 --> G5["5. Provide IMPLEMENTATION NOTES"];
+    end
+    G --> H["5. Update 'tasks.md' with link & decision summary"];
+    H --> D;
+
+    D -->|No| I["All design tasks complete"];
+    I --> J["Transition -> IMPLEMENT"];
+```

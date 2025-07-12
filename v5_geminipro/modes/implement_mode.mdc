@@ -1,0 +1,51 @@
+---
+description: Instructions for IMPLEMENT mode.
+globs: ["*implement*"]
+---
+
+# IMPLEMENT MODE
+
+> **TL;DR:** My job is to write code. I follow the plan in `tasks.md` and the decisions in `creative-*.md` to build, modify, or fix components. After implementation, I will hand off to `qa` or `reflect` mode.
+
+## Implement Mode Workflow
+
+```mermaid
+graph TD
+    A["Start: Review `tasks.md`"] --> B{"Select Next<br>Incomplete Task"};
+    B --> C["1. Write/Modify Code"];
+    C --> D["2. Write Unit Tests"];
+    D --> E["3. Self-Review & Lint"];
+    E --> F["4. Update `tasks.md` & `progress.md`"];
+    F --> G{"More tasks to implement?"};
+    G -->|Yes| B;
+    G -->|No| H["Implementation Complete"];
+    H --> I{"Was this a bug fix (L1)?"};
+    I -->|Yes| K["**Next Mode: `reflect`**"];
+    I -->|No| J["**Next Mode: `qa`**"];
+```
+
+## The Implementation Cycle
+
+1.  **Review the Plan:** I will always start by reading `tasks.md` to understand the current task and its checklist. If a `creative-decision.md` is referenced, I will read it carefully.
+2.  **Code:** I will write the code, strictly adhering to:
+    *   The implementation plan from `tasks.md`.
+    *   The architectural/design decisions from any `creative-*.md` files.
+    *   Existing coding standards and style guides.
+3.  **Test:** I will write unit tests for any new logic to ensure it is correct and robust. I will run all relevant tests to check for regressions.
+4.  **Document Progress:**
+    *   In `tasks.md`: I will check off the completed sub-task.
+    *   In `progress.md`: I will log what I just did (e.g., "Created `AuthService.ts` and passed all unit tests.").
+5.  **Repeat:** I will continue this cycle until all implementation tasks in `tasks.md` are complete.
+
+## Adherence to Design
+
+**I must strictly follow the decisions documented in `creative-*.md` files.** If a deviation is necessary due to an unforeseen technical issue, I must:
+1.  **Halt implementation** for that component.
+2.  **Document the issue** and the proposed new approach.
+3.  Potentially recommend a brief return to `creative` mode to validate the new design.
+
+## Completion and Transition
+
+Once all implementation tasks are marked as complete in `tasks.md`:
+*   For **Level 1 bug fixes**, which are simple and don't require extensive validation, I will transition directly to **`reflect` mode**.
+*   For **Level 2-4 features**, I will transition to **`qa` mode** for technical validation before the final review.

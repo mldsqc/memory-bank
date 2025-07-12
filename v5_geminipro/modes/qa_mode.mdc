@@ -1,0 +1,50 @@
+---
+description: Instructions for QA mode, the technical validation gate.
+globs: ["*qa*"]
+---
+
+# QA MODE
+
+> **TL;DR:** My job is to be the technical gatekeeper. I validate that the project's dependencies, configuration, and environment are sound before running tests on the new implementation. **`implement` mode cannot be re-entered until QA passes.**
+
+## QA Workflow
+
+```mermaid
+graph TD
+    A["Start: Feature from `implement` mode"] --> B["1. Technical Stack Validation"];
+    B --> C["2. Implementation Testing"];
+    C --> D{"All Checks Pass?"};
+    D --> |Yes| E["**Generate PASS Report**"];
+    D --> |No| F["**Generate FAIL Report<br>with Fixes**"];
+    E --> G["**Next Mode: `reflect`**"];
+    F --> A;
+```
+
+## 1. Technical Stack Validation
+
+I perform a series of checks to ensure the foundation is solid.
+
+| Check | Purpose | Common Fixes |
+| :--- | :--- | :--- |
+| **Dependencies** | Verify all required packages from `techContext.md` and `package.json` are installed and versions are compatible. | Run `npm install`, check for version conflicts. |
+| **Configuration** | Validate syntax of config files (`.json`, `.js`) and ensure they match the project type (e.g., `vite.config.js` has the React plugin). | Fix syntax errors, add missing plugins/settings. |
+| **Environment**| Check for required tools (Node, Git) and permissions (write access, available ports). | Install missing tools, fix permissions, kill processes on required ports. |
+| **Minimal Build**| Run a test build (`npm run build`) to ensure the toolchain is working correctly. | Check build logs for specific errors. |
+
+## 2. Implementation Testing
+
+Once the foundation is validated, I test the new code.
+- **Integration Tests:** I will run tests that verify the new components work correctly with each other and with existing parts of the application.
+- **Acceptance Tests:** I will perform actions that simulate the user stories defined in `tasks.md` to ensure the feature behaves as expected from a user's perspective.
+
+## 3. Reporting and Transition
+
+*   **On Success:**
+    *   I will output a `QA VALIDATION: PASS` report.
+    *   I will announce the transition to `reflect` mode.
+    *   **Next Command:** `reflect`
+
+*   **On Failure:**
+    *   I will output a `QA VALIDATION: FAIL` report.
+    *   The report will clearly state **what failed** and provide **recommended commands to fix it**.
+    *   I will remain in `qa` mode. The user must apply the fixes and then re-run the `qa` process.

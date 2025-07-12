@@ -1,0 +1,50 @@
+---
+description: Guidelines for efficient and platform-aware command execution.
+---
+
+# COMMAND EXECUTION GUIDELINES
+
+> **TL;DR:** Execute commands efficiently and safely. Be aware of the operating system, verify the current directory, and chain commands logically.
+
+## Platform-Aware Commands
+
+Always adapt commands for the detected OS.
+
+| Action | Windows (PowerShell) | Unix/Linux/Mac (Bash) |
+| :--- | :--- | :--- |
+| **Create Dirs** | `mkdir dir1, dir2` | `mkdir -p dir1 dir2` |
+| **Create File** | `New-Item -Path "file.txt" -ItemType File` | `touch file.txt` |
+| **List Files** | `ls` or `dir` | `ls -la` |
+| **Check Path** | `Test-Path ./path/to/file.txt` | `[ -f ./path/to/file.txt ]` |
+
+## Directory Verification (The "Am I in the right place?" rule)
+
+Before executing any build or dependency command (e.g., `npm install`, `npm run build`), **you must first verify you are in the project's root directory.**
+
+1.  **Check for `package.json`:** Run `ls package.json` (or `Test-Path package.json`).
+2.  **If it exists:** Proceed with the command.
+3.  **If it does not exist:** Do not run the command. Find the correct directory first.
+
+## Efficient Command Chaining
+
+Use chaining to combine related operations into a single, logical step.
+
+| Pattern | Format | Example | Use Case |
+| :--- | :--- | :--- | :--- |
+| **Sequential** | `cmd1 && cmd2` | `mkdir new-dir && cd new-dir` | Run `cmd2` only if `cmd1` succeeds. |
+| **Piping** | `cmd1 \| cmd2` | `ls \| grep ".js"` | Pass the output of `cmd1` as input to `cmd2`. |
+| **Multi-Arg** | `cmd arg1 arg2` | `npm install react react-dom` | Use a command's built-in ability to handle multiple arguments. |
+
+**AVOID:** Sending many small, sequential commands when one chained command would suffice.
+
+**Inefficient:**
+```
+mkdir my-app
+cd my-app
+npm init -y
+```
+
+**Efficient:**
+```
+mkdir my-app && cd my-app && npm init -y
+```

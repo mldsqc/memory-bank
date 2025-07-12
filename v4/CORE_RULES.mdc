@@ -1,0 +1,80 @@
+---
+description: A consolidated set of essential system mechanics and rules.
+---
+
+# Core System Rules & Mechanics
+
+This document defines the core, low-level rules for formatting, execution, and self-improvement.
+
+---
+
+## 1. Rule Formatting
+
+-   **Required Structure:** All rule files (`.mdc`) should start with a metadata block.
+    ```markdown
+    ---
+    description: Clear, one-line description of the rule's purpose.
+    alwaysApply: boolean (true if it's a global rule)
+    ---
+    ```
+-   **File References:** Use `[filename](mdc:path/to/file)` to reference other rule files.
+-   **Clarity:** Use bolding for main points, bullet points for details, and code blocks for examples.
+
+---
+
+## 2. Command Execution
+
+-   **Efficiency:** Chain related commands to reduce round-trips.
+    *   **Good:** `mkdir my-app && cd my-app && npm init -y`
+    *   **Bad:** `mkdir my-app`, then `cd my-app`, then `npm init -y`
+-   **Platform Awareness:** Adapt commands for the detected OS.
+    | Action | Windows (PowerShell) | Unix/Linux/Mac (Bash) |
+    |---|---|---|
+    | Create Dirs | `mkdir dir1, dir2` | `mkdir -p dir1 dir2` |
+    | Create Files | `echo. > file1.txt` | `touch file1.txt` |
+    | Chain Success | `cmd1 && cmd2` | `cmd1 && cmd2` |
+-   **Verification:** Before running build commands (`npm start`, `npm run build`), verify you are in the project root by checking for `package.json`.
+    *   **PowerShell:** `Test-Path package.json`
+    *   **Bash:** `ls package.json`
+-   **Documentation:** Log important commands and their output in `progress.md`.
+
+---
+
+## 3. Platform Awareness & File Verification
+
+-   **Detection:** At the start of VAN mode, the system will detect the OS (Windows, macOS, Linux) and shell type.
+-   **Path Separators:** All file paths in commands must use the correct separator (`\` for Windows, `/` for Unix-based).
+-   **File Setup:** Use batch commands to create the initial Memory Bank structure efficiently.
+
+    **Bash Example:**
+    ```bash
+    mkdir -p documentation/memory-bank/{creative,reflection} docs/archive
+    touch documentation/memory-bank/{projectbrief,tasks,activeContext,progress}.md
+    ```
+    **PowerShell Example:**
+    ```powershell
+    mkdir documentation/memory-bank/creative, documentation/memory-bank/reflection, docs/archive -ErrorAction SilentlyContinue
+    $files = "projectbrief.md","tasks.md","activeContext.md","progress.md"
+    $files | ForEach-Object { New-Item -Path "documentation/memory-bank/$_" -ItemType File -Force }
+    ```
+
+---
+
+## 4. Tool Usage (Documentation Retrieval)
+
+-   **Purpose:** To retrieve external library or repository documentation for analysis.
+-   **Workflow:**
+    1.  **Check Local:** First, check if documentation already exists in `./documentation/libraries/`. If so, stop.
+    2.  **Fetch & Save:** If not present, use the available tools (`read_wiki_structure`, `read_wiki_contents`) **ONCE** per repository.
+    3.  **Save Immediately:** Save the output of each tool call to a local file (`./documentation/libraries/{repo}_structure.md`, `./documentation/libraries/{repo}_content.md`) **immediately** to prevent context overflow.
+    4.  **Ask Questions:** Once documentation is saved locally, use the `ask_question` tool to query the local content.
+
+---
+
+## 5. Continuous Improvement
+
+-   **Trigger:** When a code pattern is repeated across 3+ files or a common error occurs, it's a trigger to update or create a rule.
+-   **Process:**
+    1.  **Analyze:** Identify the common pattern or best practice.
+    2.  **Update:** Modify an existing rule or add a new one with clear DO/DON'T examples from the actual codebase.
+    3.  **Deprecate:** If a new pattern replaces an old one, mark the old rule as deprecated.

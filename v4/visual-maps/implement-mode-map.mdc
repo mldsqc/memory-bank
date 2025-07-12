@@ -1,0 +1,23 @@
+---
+description: Visual process map for IMPLEMENT mode (Build & Code).
+---
+# IMPLEMENT MODE: PROCESS MAP
+
+```mermaid
+graph TD
+    A["START: IMPLEMENT Mode"] --> B["Acknowledge: OK IMPLEMENT"];
+    B --> C["1. Review Plan & Designs<br>Read 'tasks.md' and all 'creative-*.md' files"];
+    C --> D{"Are there sub-tasks?"};
+
+    D -->|Yes| E["2. Execute Next Sub-Task"];
+    subgraph "Implementation Loop"
+        E --> E1["Code feature/fix"];
+        E1 --> E2["Write unit/integration tests"];
+        E2 --> E3["Update 'tasks.md' (check off task)"];
+        E3 --> E4["Log output/notes in 'progress.md'"];
+    end
+    E4 --> D;
+
+    D -->|No| F["Implementation Complete"];
+    F --> G["Transition -> QA"];
+```

@@ -1,0 +1,58 @@
+---
+description: Instructions for VAN mode, the system's entry point.
+globs: ["*van*"]
+---
+
+# VAN (VANILLA) MODE
+
+> **TL;DR:** My job is to analyze the user's request, set up the project environment, and determine the task's complexity to choose the correct workflow.
+
+## VAN Mode Workflow
+
+```mermaid
+graph TD
+    A["Start: User Request"] --> B["1. Setup & Verification"];
+    B --> C["2. Understand Request"];
+    C --> D{"3. Determine Complexity<br>using `complexity_levels.mdc`"};
+    D --> |"Level 1 (Simple)"| E["Action: Prepare for direct implementation."];
+    D --> |"Level 2-4 (Complex)"| F["Action: Prepare for detailed planning."];
+    E --> G["**Next Mode: `implement`**"];
+    F --> H["**Next Mode: `plan`**"];
+```
+
+## Step 1: Setup & Verification
+
+My first priority is to ensure the environment is ready.
+
+1.  **Platform Awareness:** Detect the OS (Windows/Mac/Linux) to use the correct shell commands (e.g., `mkdir -p` vs `mkdir`). See [command_execution.mdc](mdc:core_concepts/command_execution.mdc).
+2.  **Memory Bank Check:**
+    *   Verify that the `documentation/memory-bank/` directory and its core files exist, as defined in [memory_bank_rules.mdc](mdc:memory_bank_rules.mdc).
+    *   If they don't exist, **I MUST create them immediately**. This is a mandatory first step.
+
+## Step 2: Understand the Request
+
+I will analyze the user's prompt to define the task.
+- **Goal:** What is the primary objective?
+- **Scope:** Is this a bug fix, a new feature, or a refactor?
+- **Keywords:** I will look for keywords like "fix," "add," "create," "refactor," "design."
+
+## Step 3: Determine Complexity
+
+Using the user's request and my analysis, I will apply the decision tree from **[complexity_levels.mdc](mdc:core_concepts/complexity_levels.mdc)** to classify the task.
+
+-   **Level 1 (Quick Fix):** A small, isolated change (e.g., fix a typo, correct a CSS value).
+-   **Level 2 (Simple Enhancement):** A self-contained change (e.g., add a new field to a form).
+-   **Level 3 (Intermediate Feature):** A task involving multiple components (e.g., a new settings page).
+-   **Level 4 (Complex System):** A task with architectural implications (e.g., a new authentication system).
+
+## Step 4: Transition to Next Mode
+
+Based on the complexity, I will announce the next step.
+
+*   **If Level 1:**
+    *   "This is a simple fix. I will proceed directly to `implement` mode."
+    *   **Next Command:** `implement`
+
+*   **If Level 2, 3, or 4:**
+    *   "This task requires detailed planning. I will proceed to `plan` mode."
+    *   **Next Command:** `plan`

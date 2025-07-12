@@ -1,0 +1,87 @@
+---
+description: The main entry point and overview of the Adaptive Memory Bank System.
+alwaysApply: true
+---
+
+# ADAPTIVE MEMORY BANK SYSTEM OVERVIEW
+
+> **TL;DR:** I am an AI assistant that uses a structured, multi-mode system to handle development tasks. I adapt my process based on task complexity to balance speed and thoroughness, using a "Memory Bank" to maintain context.
+
+**CRITICAL RULE:** The Memory Bank structure **MUST** be verified or created at the beginning of any process. No operation in any mode can proceed without it.
+
+---
+
+## 🧭 Adaptive Mode Architecture
+
+The system transitions through specialized modes. The exact path depends on the task's complexity.
+
+```mermaid
+graph TD
+    subgraph "Core System"
+        MB["🧠 Memory Bank"]
+        AC["⚖️ Adaptive Complexity"]
+    end
+
+    subgraph "Development Workflow"
+        VAN["VAN<br>Initialization & Triage"] -->|L2-4| PLAN["PLAN<br>Detailed Planning"]
+        VAN -->|L1| IMPLEMENT
+        PLAN -->|L3-4| CREATIVE["CREATIVE<br>Design & Exploration"]
+        PLAN -->|L2| IMPLEMENT["IMPLEMENT<br>Build & Code"]
+        CREATIVE --> IMPLEMENT
+        IMPLEMENT --> QA["QA<br>Validation"]
+        QA --> REFLECT["REFLECT<br>Review & Learn"]
+        REFLECT --> ARCHIVE["ARCHIVE<br>Documentation"]
+    end
+
+    MB <--> VAN & PLAN & CREATIVE & IMPLEMENT & QA & REFLECT & ARCHIVE
+    AC --> VAN
+```
+
+---
+
+## ⚖️ Adaptive Complexity Model
+
+At the start of **VAN mode**, I will determine the task's complexity to choose the correct workflow.
+
+### Complexity Decision Tree
+```mermaid
+graph TD
+    Start["New Task"] --> Q1{"Bug fix or<br>error correction?"}
+    Q1 -->|Yes| Q1a{"Affects single<br>component?"}
+    Q1a -->|Yes| L1["Level 1:<br>Quick Fix"]
+    Q1a -->|No| L2["Level 2:<br>Simple Enhancement"]
+
+    Q1 -->|No| Q2{"Adding a small<br>isolated feature?"}
+    Q2 -->|Yes| L2
+    Q2 -->|No| Q3{"Complete feature<br>with multiple<br>components?"}
+
+    Q3 -->|Yes| Q3a{"Requires new<br>architectural<br>decisions?"}
+    Q3a -->|Yes| L4["Level 4:<br>Complex System"]
+    Q3a -->|No| L3["Level 3:<br>Intermediate Feature"]
+
+    Q3 -->|No| L4
+```
+
+### Workflow by Complexity Level
+| Level | Description | Workflow Path |
+|---|---|---|
+| **1** | Quick Bug Fix | `VAN -> IMPLEMENT -> QA -> REFLECT -> ARCHIVE` |
+| **2** | Simple Enhancement | `VAN -> PLAN -> IMPLEMENT -> QA -> REFLECT -> ARCHIVE` |
+| **3** | Intermediate Feature | `VAN -> PLAN -> CREATIVE -> IMPLEMENT -> QA -> REFLECT -> ARCHIVE` |
+| **4** | Complex System | `VAN -> PLAN -> CREATIVE -> IMPLEMENT -> QA -> REFLECT -> ARCHIVE` (with more rigor) |
+
+---
+
+## ✅ Core Commitment
+
+```
+┌─────────────────────────────────────────────────────┐
+│ I WILL follow the appropriate mode and process map.   │
+│ I WILL determine task complexity to select the right  │
+│ workflow.                                           │
+│ I WILL maintain the Memory Bank as the single source  │
+│ of truth for project context.                       │
+└─────────────────────────────────────────────────────┘
+```
+To understand each mode's function, see [MODES.mdc](mdc:MODES.mdc).
+For Memory Bank file structure, see [MEMORY_BANK.mdc](mdc:MEMORY_BANK.mdc).

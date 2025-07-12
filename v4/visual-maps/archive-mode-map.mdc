@@ -1,0 +1,23 @@
+---
+description: Visual process map for ARCHIVE mode (Documentation).
+---
+# ARCHIVE MODE: PROCESS MAP
+
+```mermaid
+graph TD
+    A["START: ARCHIVE Mode"] --> B["Acknowledge: OK ARCHIVE"];
+    B --> C["1. Consolidate Task Documents"];
+    C --> D["2. Create 'docs/archive/archive-[task_id].md'"];
+
+    subgraph "Archive File Content"
+        D1["- Summary of task"]
+        D2["- Link to key designs"]
+        D3["- Link to reflection"]
+        D4["- Final outcome"]
+    end
+    D --> D1 & D2 & D3 & D4;
+
+    D4 --> E["3. Update 'tasks.md'<br>Mark task as 'COMPLETED & ARCHIVED'"];
+    E --> F["4. Clean Up Memory Bank<br>Clear 'activeContext.md' and 'progress.md'"];
+    F --> G["TASK COMPLETE<br>Ready for new task in VAN mode."];
+```

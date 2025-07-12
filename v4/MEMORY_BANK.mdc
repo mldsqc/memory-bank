@@ -1,0 +1,69 @@
+---
+description: The definitive guide to the Memory Bank file structure and its purpose.
+---
+
+# Memory Bank: Structure and Directives
+
+**CRITICAL:** All core Memory Bank files reside within the `documentation/memory-bank/` directory. This structure must be verified at the start of any task.
+
+---
+
+## Memory Bank File Structure
+
+```mermaid
+flowchart TD
+    subgraph "documentation/memory-bank/"
+        direction LR
+        projectbrief.md --> activeContext.md
+        tasks.md --> progress.md
+        activeContext.md --> tasks.md
+        subgraph "Outputs"
+            direction TB
+            creative["creative/"]
+            reflection["reflection/"]
+        end
+    end
+    subgraph "Permanent Archive"
+        archive_dir["docs/archive/"]
+    end
+
+    reflection --> archive_dir
+    creative --> archive_dir
+```
+
+---
+
+## Core File Directives
+
+*   **`projectbrief.md`**
+    *   **Purpose:** The foundational document containing the high-level goals, scope, and core context of the overall project.
+    *   **Updated:** Primarily in VAN or PLAN mode when the project scope is defined or refined.
+
+*   **`tasks.md`**
+    *   **Purpose:** The **single source of truth** for the currently active task. It contains the detailed plan, requirements, sub-task checklists, and status. It is a living document during a task's lifecycle.
+    *   **Updated:**
+        *   **VAN:** Initial task entry created.
+        *   **PLAN:** Fully populated with a detailed plan.
+        *   **CREATIVE:** Updated with design decisions.
+        *   **IMPLEMENT:** Checklists are ticked off.
+        *   **REFLECT/ARCHIVE:** Final status is marked `COMPLETED & ARCHIVED`.
+
+*   **`activeContext.md`**
+    *   **Purpose:** An ephemeral file holding the immediate focus or context for the AI. Helps maintain short-term memory and focus during a specific phase.
+    *   **Updated:** Frequently, to reflect the immediate goal (e.g., "Current Focus: Implementing the JWT generation module."). Cleared upon task archival.
+
+*   **`progress.md`**
+    *   **Purpose:** A log file for the implementation phase. Records significant command outputs, troubleshooting steps, and minor implementation decisions not part of the main plan.
+    *   **Updated:** Primarily during IMPLEMENT and QA modes. Cleared upon task archival.
+
+*   **`creative/creative-[feature_name].md`**
+    *   **Purpose:** A persistent document that records the exploration and final decision for a specific design task (architecture, UI/UX, etc.).
+    *   **Updated:** Created and finalized during CREATIVE mode. It is linked in `tasks.md` and moved to the final archive.
+
+*   **`reflection/reflection-[task_id].md`**
+    *   **Purpose:** A persistent document containing the analysis of a completed task—what went well, challenges, and lessons learned.
+    *   **Updated:** Created and finalized during REFLECT mode. It is linked in the final archive.
+
+*   **`docs/archive/archive-[task_id].md`**
+    *   **Purpose:** The final, permanent, self-contained record of a completed task. It summarizes the entire lifecycle for future reference.
+    *   **Updated:** Created during ARCHIVE mode. It is the final artifact of the workflow.

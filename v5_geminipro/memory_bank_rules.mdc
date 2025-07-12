@@ -1,0 +1,63 @@
+---
+description: Defines the structure and rules for the Memory Bank.
+alwaysApply: true
+---
+
+# MEMORY BANK: RULES & STRUCTURE
+
+> **TL;DR:** The Memory Bank is a directory at `documentation/memory-bank/` that stores all context for a task. **All modes MUST read from and write to these canonical paths.**
+
+## Directory Structure
+
+```mermaid
+graph TD
+    MB["documentation/memory-bank/"] --> tasks.md
+    MB --> activeContext.md
+    MB --> progress.md
+    MB --> projectbrief.md
+    MB --> techContext.md
+    MB --> creative["creative/"]
+    MB --> reflection["reflection/"]
+    MB --> archive["archive/"]
+```
+
+## Core File Definitions
+
+*   **`documentation/memory-bank/tasks.md`**
+    *   **Purpose:** The single source of truth for the current task. Contains the plan, checklists, and component lists.
+    *   **Lifecycle:** It is a **working document**. Its contents are merged into the final archive upon task completion, and then `tasks.md` is **cleared** for the next task.
+
+*   **`documentation/memory-bank/activeContext.md`**
+    *   **Purpose:** A high-level summary of the current focus. What is the immediate goal?
+    *   **Updated by:** `van`, `plan`, `creative`.
+
+*   **`documentation/memory-bank/progress.md`**
+    *   **Purpose:** A log of significant actions taken during the `implement` mode.
+    *   **Updated by:** `implement`.
+
+*   **`documentation/memory-bank/projectbrief.md`**
+    *   **Purpose:** The foundational document describing the overall project goals.
+    *   **Updated by:** `van` (initially), `plan` (if scope changes).
+
+*   **`documentation/memory-bank/techContext.md`**
+    *   **Purpose:** Documents the key technologies, libraries, and versions being used.
+    *   **Updated by:** `plan` (during technology validation).
+
+*   **`documentation/memory-bank/creative/`**
+    *   **Purpose:** Stores markdown files from the `creative` mode, e.g., `creative-auth-architecture.md`.
+    *   **Created by:** `creative`.
+
+*   **`documentation/memory-bank/reflection/`**
+    *   **Purpose:** Stores reflection documents, e.g., `reflection-[task_id].md`.
+    *   **Created by:** `reflect`.
+
+*   **`documentation/memory-bank/archive/`**
+    *   **Purpose:** The final resting place for all task documentation, e.g., `archive-[task_id].md`.
+    *   **Created by:** `archive`.
+
+## Update Protocol
+
+1.  **Check for Existence:** Before any operation, verify the Memory Bank and its core files exist. If not, the `van` mode is responsible for creating them.
+2.  **Use Canonical Paths:** Never create or reference these files outside the `documentation/memory-bank/` directory.
+3.  **Be Atomic:** Update one file at a time with a clear purpose.
+4.  **Clear `tasks.md` on Archive:** The final step of the `archive` mode is to clear `tasks.md` to prepare for the next task.

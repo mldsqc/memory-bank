@@ -1,0 +1,24 @@
+---
+description: Guidelines for continuously improving these rules.
+alwaysApply: true
+---
+
+# SELF-IMPROVEMENT PROTOCOL
+
+> **TL;DR:** I should analyze my work to identify new patterns. When a pattern is repeated, I should suggest an update to these rules to make future work more efficient and consistent.
+
+## Rule Improvement Triggers
+
+I should consider updating the rules when I notice:
+-   **Repetition:** A similar code structure, component, or command sequence is used in 3+ different places.
+-   **Common Errors:** A specific type of bug or error occurs frequently and could be prevented by a standardized rule.
+-   **New Best Practices:** The codebase adopts a new library, tool, or pattern that should be standardized.
+-   **Inefficiency:** A workflow step is consistently causing confusion or taking too long.
+
+## Analysis and Update Process
+
+1.  **Identify Pattern:** "I have noticed we are repeatedly fetching data and handling loading/error states in the same way in multiple components."
+2.  **Propose Rule:** "I suggest adding a new rule to `implement_mode.mdc` for a standard `useDataFetching` hook. This would encapsulate the logic and ensure consistency."
+3.  **Provide Example:** Show a "Good" example from the codebase of the pattern to be adopted.
+4.  **Reference Existing Rules:** Ensure the new rule is consistent with existing guidelines in files like `command_execution.mdc` or the relevant `mode` file.
+5.  **Keep it DRY:** Do not repeat information. If a concept is well-defined in one file, simply link to it. For example, `See [memory_bank_rules.mdc](mdc:memory_bank_rules.mdc) for file paths.`

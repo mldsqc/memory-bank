@@ -1,0 +1,26 @@
+---
+description: Visual process map for VAN mode (Initialization & Triage).
+---
+# VAN MODE: PROCESS MAP
+
+```mermaid
+graph TD
+    A["START: User Request"] --> B["Acknowledge: OK VAN"];
+    B --> C["1. Platform Detection<br>Detect OS, shell, and path separators"];
+    C --> D["2. Memory Bank Verification<br>Check if 'documentation/memory-bank' exists. Create if not."];
+    D --> E{"Verification OK?"};
+    E -->|No| F["ERROR: Stop and fix Memory Bank"];
+    E -->|Yes| G["3. Task & Complexity Analysis<br>Use decision tree to determine Level 1-4"];
+    G --> H["4. Initial Task Creation<br>Create task entry in 'tasks.md'"];
+    H --> I{"Complexity Level?"};
+
+    I -->|Level 1| J1["Transition -> IMPLEMENT"];
+    I -->|Level 2| J2["Transition -> PLAN"];
+    I -->|Level 3| J3["Transition -> PLAN"];
+    I -->|Level 4| J4["Transition -> PLAN"];
+
+    subgraph "Outputs"
+        H --> O1["tasks.md updated"];
+        D --> O2["Memory Bank structure created/verified"];
+    end
+```
