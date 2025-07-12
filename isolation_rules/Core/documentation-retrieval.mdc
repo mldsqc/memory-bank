@@ -1,0 +1,73 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+description: Rule for retrieving and saving documentation from repositories.
+globs: ["documentation-retrieval.mdc", "*docs*", "*documentation*"]
+alwaysApply: false
+---
+
+# DOCUMENTATION RETRIEVAL & SAVING PROTOCOL
+
+> **TL;DR:** This rule defines a strict, one-time process for fetching repository documentation from sources like GitHub/DeepWiki with deepwiki-mcp server, saving it locally to `./documentation/libraries/`, and preventing duplicate retrievals within the same conversation.
+
+## ⚙️ Documentation Retrieval Workflow
+
+```mermaid
+graph TD
+    subgraph "Input Analysis"
+        A[Start: User requests documentation for URL/repo] --> B{"URL or Path provided?"};
+        B --> |URL| C{"URL contains 'github.com'?"};
+        B --> |Path| E[Proceed with Repository Path];
+        C --> |Yes| D["Convert to deepwiki format"];
+        C --> |No| E;
+        D --> E;
+    end
+
+    subgraph "Pre-flight Checks"
+        E --> F{"Already retrieved in this conversation?"};
+        F --> |Yes| Stop1["STOP: Say 'Documentation already retrieved'"];
+        F --> |No| G{"Docs exist in ./documentation/libraries/?"};
+        G --> |Yes| Stop2["STOP: Say 'Documentation already retrieved'"];
+        G --> |No| H[Proceed to Execution];
+    end
+
+    subgraph "Execution & Saving (ONCE PER REPO)"
+        H --> I["1. Call read_wiki_structure"];
+        I --> J["2. IMMEDIATELY Save to {repo}_structure.md"];
+        J --> K["3. Call read_wiki_contents"];
+        K --> L["4. IMMEDIATELY Save to {repo}_content.md"];
+        L --> M["5. Create combined {repo}_complete_documentation.md"];
+        M --> N["6. Output: '✅ DOCUMENTATION SAVED'"];
+    end
+    
+    subgraph "Final Output"
+        N --> O["Respond to user with file location and summary"];
+        O --> P[END];
+    end
+```
+
+## **Documentation Retrieval Logic:**
+
+-   **FIRST CHECK:** If documentation for this repository was already retrieved in this conversation, OR its documentation is already in the `./documentation/libraries/` folder, **DO NOT proceed**. Say "Documentation already retrieved for this repository."
+-   If the URL contains "github.com": Convert it to the deepwiki format (e.g., `https://github.com/a2aproject/a2a-python` -> `https://deepwiki.com/a2aproject/a2a-python`).
+-   If the URL contains "deepwiki.com" OR the user provides a repository path: Proceed directly with available tools: `read_wiki_structure`, `read_wiki_contents`, `ask_question`.
+
+## **EXECUTE EXACTLY ONCE PER REPOSITORY:**
+
+1.  Check if this repository has already been processed in the current session. If YES, stop immediately.
+2.  Call `read_wiki_structure` **ONCE**.
+3.  **IMMEDIATELY** after `read_wiki_structure` returns, save its structure to a file: `./documentation/libraries/{repo_name}_structure.md`.
+4.  Call `read_wiki_contents` **ONCE**.
+5.  **IMMEDIATELY** after `read_wiki_contents` returns, save its content to a file: `./documentation/libraries/{repo_name}_content.md` (DO NOT wait, save RIGHT AWAY).
+6.  Create a combined documentation file: `./documentation/libraries/{repo_name}_complete_documentation.md`.
+7.  Output the final confirmation message: "✅ DOCUMENTATION SAVED TO FILES - RULE EXECUTION FINISHED".
+8.  **DO NOT** call these functions again for the same repository in this conversation.
+
+**CRITICAL: Save content to files IMMEDIATELY after each function call to prevent context overflow and potential agent resets.**
+
+## **After Completion:**
+
+-   Respond to the user with the location of the saved files and a brief summary of the retrieved documentation.
