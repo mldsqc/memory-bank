@@ -1,0 +1,127 @@
+---
+description: Process map for VAN QA minimal build test
+globs: van-qa-checks/build-test.mdc
+alwaysApply: false
+---
+# VAN QA: MINIMAL BUILD TEST
+
+> **TL;DR:** This component performs a minimal build test to ensure core build functionality works properly.
+
+## 4️⃣ MINIMAL BUILD TEST PROCESS
+
+```mermaid
+graph TD
+    Start["Minimal Build Test"] --> CreateTest["Create Minimal<br>Test Project"]
+    CreateTest --> BuildTest["Attempt<br>Build"]
+    BuildTest --> BuildStatus{"Build<br>Successful?"}
+    
+    BuildStatus -->|"Yes"| RunTest["Run Basic<br>Functionality Test"]
+    BuildStatus -->|"No"| FixBuild["Fix Build<br>Issues"]
+    FixBuild --> RetryBuild["Retry Build"]
+    RetryBuild --> BuildStatus
+    
+    RunTest --> TestStatus{"Test<br>Passed?"}
+    TestStatus -->|"Yes"| TestSuccess["Minimal Build Test<br>✅ PASS"]
+    TestStatus -->|"No"| FixTest["Fix Test<br>Issues"]
+    FixTest --> RetryTest["Retry Test"]
+    RetryTest --> TestStatus
+```
+
+### Minimal Build Test Commands (Examples for guidance, adapt for project/OS):
+```bash
+# Example: Perform minimal build test for a React project (Unix-like)
+# Create a temporary directory for the test
+mkdir .__build_test
+cd .__build_test
+
+# Initialize a minimal package.json
+echo '{ "name": "build-test", "version": "1.0.0", "scripts": { "build": "echo Build test successful && exit 0" } }' > package.json
+
+# Attempt build (uses the simple script defined above)
+npm run build
+
+# Check build success (npm run build exits with 0 on success)
+if [ $? -eq 0 ]; then
+    echo "Build process successful."
+    # Create minimal test file
+    echo "console.log('Test successful');" > index.js
+    
+    # Run basic test
+    node index.js
+    
+    if [ $? -eq 0 ]; then
+        echo "✅ Minimal build test passed successfully"
+        exit 0
+    else
+        echo "❌ Basic functionality test failed"
+        exit 1
+    fi
+else
+    echo "❌ Build process failed"
+    exit 1
+fi
+
+# Cleanup (Run this regardless of success/failure)
+cd ..
+rm -rf .__build_test
+```
+
+### Minimal Build Test Commands (Examples for guidance, adapt for project/OS):
+```powershell
+# Example: Perform minimal build test for a React project (PowerShell)
+$testDir = ".__build_test"
+if (Test-Path $testDir) { Remove-Item -Path $testDir -Recurse -Force }
+
+try {
+    New-Item -Path $testDir -ItemType Directory | Out-Null
+    Push-Location $testDir
+    
+    @"
+{
+  "name": "build-test",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo Build test successful"
+  }
+}
+"@ | Set-Content -Path "package.json"
+    
+    npm run build | Out-Null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Output "Build process successful."
+        @"
+console.log('Test successful');
+"@ | Set-Content -Path "index.js"
+        
+        node index.js | Out-Null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Output "✅ Minimal build test passed successfully"
+        } else {
+            Write-Output "❌ Basic functionality test failed"
+        }
+    } else {
+        Write-Output "❌ Build process failed"
+    }
+} catch {
+    Write-Output "❌ Build test failed: $($_.Exception.Message)"
+} finally {
+    Pop-Location
+    if (Test-Path $testDir) { Remove-Item -Path $testDir -Recurse -Force }
+}
+```
+
+## 📋 MINIMAL BUILD TEST CHECKPOINT
+
+```
+✓ CHECKPOINT: MINIMAL BUILD TEST
+- Test project creation successful? [YES/NO]
+- Build process completed successfully? [YES/NO]
+- Basic functionality test passed? [YES/NO]
+
+→ If all YES: QA Validation complete, proceed to generate success report.
+→ If any NO: Fix build issues before continuing.
+```
+
+**Next Step (on PASS):** Load `van-qa-utils/reports.mdc` to generate success report.
+**Next Step (on FAIL):** Check `van-qa-utils/common-fixes.mdc` for build test fixes.
+```

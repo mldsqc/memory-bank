@@ -1,0 +1,138 @@
+---
+description: Visual process map for IMPLEMENT mode (Code Implementation)
+globs: "**/implement*/**", "**/code*/**", "**/build*/**"
+alwaysApply: false
+---
+
+# IMPLEMENT MODE: CODE IMPLEMENTATION PROCESS MAP
+
+> **TL;DR:** This visual map guides the IMPLEMENT mode, focusing on systematic code implementation, adherence to design decisions, and continuous testing based on the task's complexity level.
+
+## 🧭 IMPLEMENT MODE PROCESS FLOW
+
+```mermaid
+graph TD
+    Start["START IMPLEMENT MODE"] --> ReadTasks["Read tasks.md<br>and creative documents"]
+    
+    %% Initial Assessment
+    ReadTasks --> VerifyDesign{"Design Decisions<br>Complete?"}
+    VerifyDesign -->|"No"| ReturnCreative["Return to<br>CREATIVE Mode"]
+    VerifyDesign -->|"Yes"| AssessLevel{"Determine<br>Complexity Level"}
+    
+    %% Level-Based Implementation
+    AssessLevel -->|"Level 1"| L1Implement["LEVEL 1 IMPLEMENTATION<br>Level1/optimized-workflow-level1.mdc"]
+    AssessLevel -->|"Level 2"| L2Implement["LEVEL 2 IMPLEMENTATION<br>Level2/workflow-level2.mdc"]
+    AssessLevel -->|"Level 3"| L3Implement["LEVEL 3 IMPLEMENTATION<br>Level3/implementation-intermediate.mdc"]
+    AssessLevel -->|"Level 4"| L4Implement["LEVEL 4 IMPLEMENTATION<br>Level4/phased-implementation.mdc (Conceptual)"]
+    
+    %% Level 1 Implementation (Quick Fix)
+    L1Implement --> L1Code["Implement Fix<br>Quickly"]
+    L1Code --> L1Test["Perform Minimal<br>Test"]
+    L1Test --> L1Doc["Update tasks.md<br>with Solution"]
+    
+    %% Level 2 Implementation (Simple Enhancement)
+    L2Implement --> L2Code["Implement Enhancement<br>Modularly"]
+    L2Code --> L2Unit["Write Unit Tests"]
+    L2Unit --> L2Integration["Perform Integration<br>Tests"]
+    L2Integration --> L2Doc["Update tasks.md<br>& progress.md"]
+    
+    %% Level 3-4 Implementation (Intermediate Feature / Complex System)
+    L3Implement & L4Implement --> L34Code["Implement Features<br>Iteratively"]
+    L34Code --> L34Unit["Write Unit &<br>Component Tests"]
+    L34Unit --> L34Integration["Perform Integration<br>Tests"]
+    L34Integration --> L34E2E["Perform End-to-End<br>Tests"]
+    L34E2E --> L34Review["Conduct Self-Review<br>& Linting"]
+    L34Review --> L34Doc["Update tasks.md<br>progress.md & Code Comments"]
+    
+    %% Completion & Transition
+    L1Doc & L2Doc & L34Doc --> VerifyComplete["Verify All<br>Implementation Complete"]
+    VerifyComplete --> NotifyComplete["Signal Implementation<br>Complete"]
+    NotifyComplete --> Transition["NEXT MODE:<br>REFLECT Mode (or QA if not done)"]
+```
+
+## 📋 IMPLEMENTATION GUIDELINES BY COMPLEXITY
+
+```mermaid
+graph TD
+    subgraph "Level 1: Quick Fix"
+        L1_1["Direct Code<br>Modification"]
+        L1_2["Focus on Single<br>Component"]
+        L1_3["Quick Local Test"]
+    end
+    
+    subgraph "Level 2: Simple Enhancement"
+        L2_1["Modular Component<br>Development"]
+        L2_2["Basic Unit Testing"]
+        L2_3["Integration with<br>Directly Affected Area"]
+    end
+    
+    subgraph "Level 3: Intermediate Feature"
+        L3_1["Iterative Development<br>by Sub-feature"]
+        L3_2["Comprehensive Unit &<br>Component Testing"]
+        L3_3["Dedicated Integration<br>Testing Phase"]
+        L3_4["Adherence to Creative<br>Design Documents"]
+    end
+    
+    subgraph "Level 4: Complex System"
+        L4_1["Phased Implementation<br>by Subsystem"]
+        L4_2["Rigorous Testing<br>Across Layers"]
+        L4_3["Extensive Integration<br>with Existing Systems"]
+        L4_4["Strict Governance &<br>Review Process"]
+    end
+    
+    L1_1 --> L1_2 --> L1_3
+    L2_1 --> L2_2 --> L2_3
+    L3_1 --> L3_2 --> L3_3 --> L3_4
+    L4_1 --> L4_2 --> L4_3 --> L4_4
+```
+
+## 📊 REQUIRED FILE STATE VERIFICATION
+
+Before implementation can begin, verify file state:
+
+```mermaid
+graph TD
+    Start["File State<br>Verification"] --> CheckTasks{"tasks.md has<br>planning complete?"}
+    
+    CheckTasks -->|"No"| ErrorPlan["ERROR:<br>Return to PLAN Mode"]
+    CheckTasks -->|"Yes"| CheckCreative{"Creative phases<br>identified & complete<br> (if required)?"}
+    
+    CheckCreative -->|"No"| ErrorCreative["ERROR:<br>Return to CREATIVE Mode"]
+    CheckCreative -->|"Yes"| ReadyImplement["Ready for<br>Implementation"]
+```
+
+## 📝 PROGRESS DOCUMENTATION GUIDELINES
+
+*   **`tasks.md`**: Update specific subtasks (`[ ]` to `[x]`) as completed.
+*   **`progress.md`**: Add brief entries for significant milestones, completed modules, or resolved blockers.
+*   **Code Comments**: Use for internal code explanations, especially for complex algorithms or design patterns.
+
+## 📋 IMPLEMENTATION VERIFICATION CHECKLIST
+
+```
+✓ IMPLEMENTATION VERIFICATION
+- All subtasks for current phase completed? [YES/NO]
+- Code changes aligned with plan/design? [YES/NO]
+- Necessary tests written and passed? [YES/NO]
+- tasks.md updated with progress? [YES/NO]
+- progress.md updated (if significant)? [YES/NO]
+- Code reviewed (self-review/linting)? [YES/NO]
+
+→ If all YES: Implementation phase for this segment complete
+→ If any NO: Complete missing elements or address issues
+```
+
+## 🔄 MODE TRANSITION NOTIFICATION
+
+When all implementation phases for the task are complete:
+
+```
+## IMPLEMENTATION COMPLETE
+
+✅ All planned features/fixes implemented
+✅ Code tested and reviewed
+✅ tasks.md and progress.md updated
+✅ Final verification passed
+
+→ NEXT RECOMMENDED MODE: REFLECT MODE
+```

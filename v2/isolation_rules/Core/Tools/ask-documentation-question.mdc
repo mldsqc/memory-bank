@@ -1,0 +1,37 @@
+---
+description: Rule for asking a specific question against existing repository documentation.
+globs: ["ask-documentation-question.mdc", "*ask_question*"]
+alwaysApply: false
+---
+
+# DOCUMENTATION QUESTION PROTOCOL
+
+> **TL;DR:** This rule handles asking a single, specific question using the `ask_question` tool of deepwiki-mcp server against a repository's documentation, but ONLY if that documentation has already been retrieved and saved locally.
+
+## ❓ Ask Question Workflow
+
+```mermaid
+graph TD
+    Start["Start: User provides question and optional repo_name"] --> A{"Is documentation for this repo in ./documentation/libraries/?"};
+    A --> |No| B["STOP: Inform user documentation must be retrieved first using FETCHDOCS."];
+    A --> |Yes| C["Proceed to Ask Question"];
+    
+    C --> D["Call 'ask_question' tool with user's question and repo_name"];
+    D --> E["Receive answer from MCP server"];
+    E --> F["Format and present the answer clearly to the user."];
+    F --> G[END];
+```
+
+## **Question Execution Logic:**
+
+1.  **PREREQUISITE CHECK:** The AI **MUST** first verify that the documentation for the relevant repository already exists in the `./documentation/libraries/` folder.
+    *   If the user does not specify a repository, assume the question relates to the repository most recently discussed or retrieved.
+    *   If the documentation folder for the repository does not exist, **STOP**. Instruct the user: "Documentation has not been retrieved for this repository yet. Please run `FETCHDOCS [URL/path]` first."
+
+2.  **EXECUTE QUESTION:** If the documentation exists, call the `ask_question` tool **ONCE**.
+    *   **Tool:** `ask_question`
+    *   **Parameters:**
+        *   `question`: The specific question provided by the user.
+        *   `repo_name`: The name of the repository (e.g., `a2aproject/a2a-python`).
+
+3.  **OUTPUT:** Present the answer returned by the tool directly to the user in a clear and readable format.

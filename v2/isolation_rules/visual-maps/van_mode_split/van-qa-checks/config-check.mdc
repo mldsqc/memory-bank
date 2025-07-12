@@ -1,0 +1,133 @@
+---
+description: Process map for VAN QA configuration validation
+globs: van-qa-checks/config-check.mdc
+alwaysApply: false
+---
+# VAN QA: CONFIGURATION VALIDATION
+
+> **TL;DR:** This component validates configuration files for proper syntax and compatibility with the project and platform.
+
+## 2️⃣ CONFIGURATION VALIDATION PROCESS
+
+```mermaid
+graph TD
+    Start["Configuration Validation"] --> IdentifyConfigs["Identify Configuration<br>Files"]
+    IdentifyConfigs --> ReadConfigs["Read Configuration<br>Files"]
+    ReadConfigs --> ValidateSyntax["Validate Syntax<br>and Format"]
+    ValidateSyntax --> SyntaxStatus{"Syntax<br>Valid?"}
+    
+    SyntaxStatus -->|"Yes"| CheckCompatibility["Check Compatibility<br>with Platform"]
+    SyntaxStatus -->|"No"| FixSyntax["Fix Syntax<br>Errors"]
+    FixSyntax --> RetryValidate["Retry Validation"]
+    RetryValidate --> SyntaxStatus
+    
+    CheckCompatibility --> CompatStatus{"Compatible with<br>Platform?"}
+    CompatStatus -->|"Yes"| ConfigSuccess["Configurations Validated<br>✅ PASS"]
+    CompatStatus -->|"No"| AdaptConfigs["Adapt Configurations<br>for Platform"]
+    AdaptConfigs --> RetryCompat["Retry Compatibility<br>Check"]
+    RetryCompat --> CompatStatus
+```
+
+### Configuration Validation Commands (Examples for guidance, adapt for project/OS):
+```bash
+# Example: Validate configuration files for a web project (Unix-like)
+CONFIG_FILES=("package.json" "tsconfig.json" "vite.config.js")
+INVALID_CONFIGS=()
+INCOMPATIBLE_CONFIGS=()
+
+for config_file in "${CONFIG_FILES[@]}"; do
+    if [ -f "$config_file" ]; then
+        if [[ "$config_file" == *.json ]]; then
+            # Validate JSON syntax
+            jq . "$config_file" > /dev/null 2>&1
+            if [ $? -ne 0 ]; then
+                INVALID_CONFIGS+=("$config_file (JSON syntax error)")
+                continue
+            fi
+        fi
+        
+        # Specific configuration compatibility checks (e.g., for Vite React project)
+        if [[ "$config_file" == "vite.config.js" ]]; then
+            if ! grep -q "react()" "$config_file"; then
+                INCOMPATIBLE_CONFIGS+=("$config_file (Missing React plugin for React project)")
+            fi
+        fi
+    else
+        INVALID_CONFIGS+=("$config_file (file not found)")
+    fi
+done
+
+if [ ${#INVALID_CONFIGS[@]} -eq 0 ] && [ ${#INCOMPATIBLE_CONFIGS[@]} -eq 0 ]; then
+    echo "✅ All configurations validated and compatible"
+    exit 0
+else
+    if [ ${#INVALID_CONFIGS[@]} -gt 0 ]; then
+        echo "❌ Invalid configurations: ${INVALID_CONFIGS[*]}"
+    fi
+    if [ ${#INCOMPATIBLE_CONFIGS[@]} -gt 0 ]; then
+        echo "❌ Incompatible configurations: ${INCOMPATIBLE_CONFIGS[*]}"
+    fi
+    exit 1
+fi
+```
+```powershell
+# Example: Validate configuration files for a web project (PowerShell)
+$configFiles = @(
+    "package.json",
+    "tsconfig.json",
+    "vite.config.js"
+)
+
+$invalidConfigs = @()
+$incompatibleConfigs = @()
+
+foreach ($configFile in $configFiles) {
+    if (Test-Path $configFile) {
+        if ($configFile -match "\.json$") {
+            try {
+                Get-Content $configFile -Raw | ConvertFrom-Json | Out-Null
+            } catch {
+                $invalidConfigs += "$configFile (JSON syntax error: $($_.Exception.Message))"
+                continue
+            }
+        }
+        
+        if ($configFile -eq "vite.config.js") {
+            $content = Get-Content $configFile -Raw
+            if ($content -notmatch "react\(\)") {
+                $incompatibleConfigs += "$configFile (Missing React plugin for React project)"
+            }
+        }
+    } else {
+        $invalidConfigs += "$configFile (file not found)"
+    }
+}
+
+if ($invalidConfigs.Count -eq 0 -and $incompatibleConfigs.Count -eq 0) {
+    Write-Output "✅ All configurations validated and compatible"
+    exit 0
+} else {
+    if ($invalidConfigs.Count -gt 0) {
+        Write-Output "❌ Invalid configurations: $($invalidConfigs -join ', ')"
+    }
+    if ($incompatibleConfigs.Count -gt 0) {
+        Write-Output "❌ Incompatible configurations: $($incompatibleConfigs -join ', ')"
+    }
+    exit 1
+}
+```
+
+## 📋 CONFIGURATION VALIDATION CHECKPOINT
+
+```
+✓ CHECKPOINT: CONFIGURATION VALIDATION
+- All configuration files found? [YES/NO]
+- All configuration syntax valid? [YES/NO]
+- All configurations compatible with platform? [YES/NO]
+
+→ If all YES: Continue to Environment Validation.
+→ If any NO: Fix configuration issues before continuing.
+```
+
+**Next Step (on PASS):** Load `van-qa-checks/environment-check.mdc`.
+**Next Step (on FAIL):** Check `van-qa-utils/common-fixes.mdc` for configuration fixes.

@@ -1,0 +1,126 @@
+---
+description: Process map for VAN QA environment validation
+globs: van-qa-checks/environment-check.mdc
+alwaysApply: false
+---
+# VAN QA: ENVIRONMENT VALIDATION
+
+> **TL;DR:** This component verifies that the build environment is properly set up with required tools and permissions.
+
+## 3️⃣ ENVIRONMENT VALIDATION PROCESS
+
+```mermaid
+graph TD
+    Start["Environment Validation"] --> CheckEnv["Check Build Environment"]
+    CheckEnv --> VerifyBuildTools["Verify Build Tools"]
+    VerifyBuildTools --> ToolsStatus{"Build Tools<br>Available?"}
+    
+    ToolsStatus -->|"Yes"| CheckPerms["Check Permissions<br>and Access"]
+    ToolsStatus -->|"No"| InstallTools["Install Required<br>Build Tools"]
+    InstallTools --> RetryTools["Retry Verification"]
+    RetryTools --> ToolsStatus
+    
+    CheckPerms --> PermsStatus{"Permissions<br>Sufficient?"}
+    PermsStatus -->|"Yes"| EnvSuccess["Environment Validated<br>✅ PASS"]
+    PermsStatus -->|"No"| FixPerms["Fix Permission<br>Issues"]
+    FixPerms --> RetryPerms["Retry Permission<br>Check"]
+    RetryPerms --> PermsStatus
+```
+
+### Environment Validation Commands (Examples for guidance, adapt for project/OS):
+```bash
+# Example: Validate environment for a web project (Unix-like)
+validate_environment() {
+    local required_tools=("git" "node" "npm")
+    local missing_tools=()
+    local permission_issues=()
+
+    for tool in "${required_tools[@]}"; do
+        if ! command -v "$tool" &> /dev/null; then
+            missing_tools+=("$tool")
+        fi
+    done
+
+    # Check write permissions in current directory
+    local test_file=".__permission_test"
+    touch "$test_file" 2>/dev/null
+    if [ $? -ne 0 ]; then
+        permission_issues+=("Current directory (write permission denied)")
+    fi
+    rm -f "$test_file"
+
+    # Check if port 3000 is available (commonly used for dev servers)
+    if lsof -i :3000 > /dev/null; then
+        permission_issues+=("Port 3000 (already in use or access denied)")
+    fi
+
+    if [ ${#missing_tools[@]} -eq 0 ] && [ ${#permission_issues[@]} -eq 0 ]; then
+        echo "✅ Environment validated successfully"
+        return 0
+    else
+        if [ ${#missing_tools[@]} -gt 0 ]; then
+            echo "❌ Missing tools: ${missing_tools[*]}"
+        fi
+        if [ ${#permission_issues[@]} -gt 0 ]; then
+            echo "❌ Permission issues: ${permission_issues[*]}"
+        fi
+        return 1
+    fi
+}
+```
+```powershell
+# Example: Validate environment for a web project (PowerShell)
+$requiredTools = @(
+    @{Name = "git"; Command = "git --version"},
+    @{Name = "node"; Command = "node --version"},
+    @{Name = "npm"; Command = "npm --version"}
+)
+
+$missingTools = @()
+$permissionIssues = @()
+
+foreach ($tool in $requiredTools) {
+    try { Invoke-Expression $tool.Command | Out-Null } catch { $missingTools += $tool.Name }
+}
+
+try {
+    $testFile = ".__permission_test"
+    New-Item -Path $testFile -ItemType File -Force | Out-Null
+    Remove-Item -Path $testFile -Force
+} catch {
+    $permissionIssues += "Current directory (write permission denied)"
+}
+
+try {
+    $listener = New-Object System.Net.Sockets.TcpListener([System.Net.IPAddress]::Loopback, 3000)
+    $listener.Start()
+    $listener.Stop()
+} catch {
+    $permissionIssues += "Port 3000 (already in use or access denied)"
+}
+
+if ($missingTools.Count -eq 0 -and $permissionIssues.Count -eq 0) {
+    Write-Output "✅ Environment validated successfully"
+    exit 0
+} else {
+    if ($missingTools.Count -gt 0) { Write-Output "❌ Missing tools: $($missingTools -join ', ')" }
+    if ($permissionIssues.Count -gt 0) { Write-Output "❌ Permission issues: $($permissionIssues -join ', ')" }
+    exit 1
+}
+```
+
+## 📋 ENVIRONMENT VALIDATION CHECKPOINT
+
+```
+✓ CHECKPOINT: ENVIRONMENT VALIDATION
+- All required build tools installed? [YES/NO]
+- Project directory permissions sufficient? [YES/NO]
+- Required ports available? [YES/NO]
+
+→ If all YES: Continue to Minimal Build Test.
+→ If any NO: Fix environment issues before continuing.
+```
+
+**Next Step (on PASS):** Load `van-qa-checks/build-test.mdc`.
+**Next Step (on FAIL):** Check `van-qa-utils/common-fixes.mdc` for environment fixes.
+```

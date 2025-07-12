@@ -1,0 +1,153 @@
+---
+description: Hierarchical rule loading system for optimized token usage.
+globs: "**/rule-loading*/**", "**/optimization*/**"
+alwaysApply: false
+---
+
+# HIERARCHICAL RULE LOADING SYSTEM
+
+> **TL;DR:** This system loads only necessary rules based on context, complexity level, and current phase to maximize token efficiency.
+
+## 🧠 HIERARCHICAL RULE STRUCTURE
+
+```mermaid
+graph TD
+    Root["Root Rules"] --> Core["Core Rules<br>(Always Loaded)"]
+    Root --> Common["Common Rules<br>(Mode Independent)"]
+    Root --> Mode["Mode-Specific<br>Rules"]
+    Root --> Level["Complexity Level<br>Rules"]
+    
+    Core --> Platform["Platform<br>Detection"]
+    Core --> File["File<br>Operations"]
+    Core --> Transition["Mode<br>Transitions"]
+    
+    Mode --> VAN["VAN Mode<br>Rules"]
+    Mode --> PLAN["PLAN Mode<br>Rules"]
+    Mode --> CREATIVE["CREATIVE Mode<br>Rules"]
+    Mode --> IMPLEMENT["IMPLEMENT Mode<br>Rules"]
+    Mode --> REFLECT["REFLECT Mode<br>Rules"]
+    
+    Level --> Level1["Level 1<br>Rules"]
+    Level --> Level2["Level 2<br>Rules"]
+    Level --> Level3["Level 3<br>Rules"]
+    Level --> Level4["Level 4<br>Rules"]
+```
+
+## 📊 RULE LOADING PROTOCOL
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant System
+    participant RuleCache
+    participant FileSystem
+    
+    User->>System: Request mode activation
+    System->>System: (Internal: Check & Load Core, Common Rules)
+    System->>System: (Internal: Load Essential Mode & Level Rules)
+    System->>System: (Internal: Register lazy loaders for specialized rules)
+    System->>User: Mode initialized
+    
+    User->>System: Request specialized functionality
+    System->>RuleCache: Check specialized rule cache
+    RuleCache-->>System: Return cached rule (if available)
+    
+    alt Rule not in cache
+        System->>FileSystem: Load specialized rule
+        FileSystem-->>System: Return specialized rule
+        System->>RuleCache: Cache specialized rule
+    end
+    
+    System->>User: Execute specialized functionality
+```
+
+## 📋 RULE DEPENDENCY MAP
+
+This map shows which rules depend on others and are loaded as part of a hierarchy or for specific modes:
+
+```mermaid
+graph TD
+    Main["main-optimized.mdc"] --> Core1["platform-awareness.mdc"]
+    Main --> Core2["file-verification.mdc"]
+    Main --> Core3["command-execution.mdc"]
+    
+    subgraph "VAN Mode"
+        VanMap["van-mode-map.mdc"] --> Van1["van-complexity-determination.mdc"]
+        VanMap --> Van2["van-platform-detection.mdc"]
+    end
+    
+    subgraph "PLAN Mode"
+        PlanMap["plan-mode-map.mdc"] --> Plan1["task-tracking-basic.mdc"]
+        PlanMap --> Plan2["planning-comprehensive.mdc"]
+    end
+    
+    subgraph "CREATIVE Mode"
+        CreativeMap["creative-mode-map.mdc"] --> Creative1["creative-phase-enforcement.mdc"]
+        CreativeMap --> Creative2["creative-phase-metrics.mdc"]
+        Creative1 & Creative2 -.-> CreativeSpecialized["Specialized Creative Rules"]
+        CreativeSpecialized --> CArch["creative-phase-architecture.mdc"]
+        CreativeSpecialized --> CAlgo["creative-phase-algorithm.mdc"]
+        CreativeSpecialized --> CUIUX["creative-phase-uiux.mdc"]
+    end
+    
+    subgraph "IMPLEMENT Mode"
+        ImplementMap["implement-mode-map.mdc"] --> Impl1["implementation-guide.mdc"]
+        ImplementMap --> Impl2["testing-strategy.mdc"]
+    end
+```
+
+## 🔍 MODE-SPECIFIC RULE LOADING (ESSENTIALS)
+
+**Instructions:** When entering a mode, load these essential rules first. Specialized rules are loaded only on demand.
+
+*   **VAN Mode:**
+    *   `main-optimized.mdc` (Core)
+    *   `Core/platform-awareness.mdc`
+    *   `Core/file-verification.mdc`
+    *   `visual-maps/van_mode_split/van-complexity-determination.mdc`
+    *   `visual-maps/van_mode_split/van-platform-detection.mdc`
+    *   (Optionally, `visual-maps/van-mode-map.mdc` if it consolidates other VAN sub-maps)
+
+*   **PLAN Mode:**
+    *   `main-optimized.mdc` (Core)
+    *   `visual-maps/plan-mode-map.mdc`
+    *   `LevelX/task-tracking-[complexity].mdc` (Loaded based on complexity)
+
+*   **CREATIVE Mode:**
+    *   `main-optimized.mdc` (Core)
+    *   `visual-maps/creative-mode-map.mdc`
+    *   `Core/creative-phase-enforcement.mdc`
+
+*   **CREATIVE Mode Specialized Rules (Lazy Loaded - on demand):**
+    *   `Phases/CreativePhase/creative-phase-architecture.mdc`
+    *   (Add others like `creative-phase-algorithm.mdc`, `creative-phase-uiux.mdc` if they are created)
+
+*   **IMPLEMENT Mode:**
+    *   `main-optimized.mdc` (Core)
+    *   `Core/command-execution.mdc`
+    *   `visual-maps/implement-mode-map.mdc`
+
+## 🚀 TOKEN EFFICIENCY BENEFITS
+
+The hierarchical loading system provides:
+1.  Reduced Initial Loading (only essentials).
+2.  Cached Core Rules.
+3.  Specialized Rule Loading (only when needed).
+4.  Complexity-Based Loading.
+
+## 🧪 RULE LOADING VERIFICATION
+
+To verify the system is working:
+*   Confirm Core, Mode-Essential, and Complexity-Level rules are loaded.
+*   Confirm Specialized Rules are *not* loaded initially.
+*   Monitor current token usage to ensure it aligns with expected savings.
+
+```
+✓ RULE LOADING VERIFICATION
+- Core Rules: [Loaded/Not Loaded]
+- Mode-Essential Rules: [Loaded/Not Loaded]
+- Complexity-Level Rules: [Loaded/Not Loaded]
+- Specialized Rules: [Loaded/Not Loaded] (Should be 'Not Loaded' initially)
+
+Current Token Usage: [X] tokens
+```

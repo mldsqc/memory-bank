@@ -1,0 +1,74 @@
+---
+description: Optimized mode transition strategy for token efficiency.
+globs: "**/transition*/**", "**/mode-switching*/**"
+alwaysApply: false
+---
+
+# OPTIMIZED MODE TRANSITION
+
+> **TL;DR:** This strategy ensures efficient mode transitions by minimizing token overhead and maximizing context preservation.
+
+## 🔄 MODE TRANSITION WORKFLOW
+
+```mermaid
+sequenceDiagram
+    participant CurrentMode
+    participant ContextManager
+    participant NextMode
+    
+    CurrentMode->>CurrentMode: Complete Phase Requirements
+    CurrentMode->>ContextManager: Summarize & Store Critical Context
+    ContextManager->>ContextManager: Optimize Context for Next Mode
+    CurrentMode->>User: "Phase complete. NEXT MODE: [mode name]"
+    User->>CurrentMode: End Current Mode
+    User->>NextMode: Start Next Mode
+    NextMode->>ContextManager: Request Relevant Context
+    ContextManager-->>NextMode: Provide Optimized Context
+    NextMode->>NextMode: Continue with Preserved Context
+```
+
+## 📋 CONTEXT TRANSFER PROTOCOL
+
+When transitioning between modes, only the **critical, relevant context** for the *next* phase should be actively transferred.
+**Instructions:**
+1.  **Current Mode:** Before exiting, update `tasks.md` with the final status and key outcomes of the completed phase. Summarize critical information for `activeContext.md`.
+2.  **Next Mode:** Upon activation, the new mode will:
+    *   Read `tasks.md` for overall task status and next steps.
+    *   Read `activeContext.md` for immediate focus.
+    *   If specialized information is needed (e.g., design decisions in IMPLEMENT mode), load the relevant `creative-*.md` files *on demand*.
+
+## 💡 TOKEN EFFICIENCY IN TRANSITIONS
+
+-   **Avoid Full Context Duplication:** Do not copy the *entire* previous mode's working memory.
+-   **Leverage Memory Bank Files:** `tasks.md`, `activeContext.md`, `progress.md` serve as the primary persistent context.
+-   **Lazy Loading of Detailed Rules:** Only load `creative-*.md` or other detailed rules when explicitly required by the next mode's logic, not upon general mode entry.
+-   **Summarization:** Encourage concise summaries in `activeContext.md` or `progress.md` for quick overview rather than full detail copy-pasting.
+
+## 📌 TRANSITION MESSAGES
+
+Use these messages to guide the user during transitions:
+
+### Phase Completion & Next Mode Prompt:
+```
+✅ [Current Phase] Complete
+➡️ NEXT RECOMMENDED MODE: [Next Mode Name]
+
+Type '[Next Mode Name]' to proceed.
+```
+
+### Context Preservation Confirmation (after new mode activates):
+```
+Continuing from previous work.
+Current task focus: [Summary from activeContext.md]
+Task status: [Status from tasks.md]
+```
+
+## 🚨 TRANSITION BLOCKERS
+
+If the `tasks.md` or `activeContext.md` are not in the expected state for the next mode, provide clear instructions:
+
+```
+⛔️ MODE TRANSITION BLOCKED
+Reason: [Explanation, e.g., "Tasks for current phase not marked complete in tasks.md"]
+Action: Please return to [Previous Mode] and complete necessary steps.
+```

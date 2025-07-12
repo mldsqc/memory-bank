@@ -1,0 +1,80 @@
+---
+description: Optimized file verification system, ensuring Memory Bank structure exists before any file operations.
+globs: file-verification.mdc
+alwaysApply: false
+---
+# OPTIMIZED FILE VERIFICATION SYSTEM
+
+> **TL;DR:** This system efficiently verifies and creates required Memory Bank file structures using batch operations and platform-optimized commands. **CRITICAL: Memory Bank MUST exist and be valid before any other file operations.**
+
+## 🚨 CRITICAL: MEMORY BANK VERIFICATION
+
+Before any other file operations, verify Memory Bank existence and structure. If missing, create immediately.
+
+```mermaid
+graph TD
+    Start["Start File Verification"] --> MemBankCheck{"Memory Bank Exists & Valid?"}
+    MemBankCheck -->|"No"| CreateMemBank["CREATE MISSING MB FILES/DIRS"]
+    MemBankCheck -->|"Yes"| MainVerification["Proceed to Full File Verification"]
+    CreateMemBank --> MainVerification
+```
+
+**Memory Bank Check & Creation Instructions:**
+1.  **Check Memory Bank Root:** Use platform-specific command to check if `documentation/memory-bank` directory exists.
+    *   Windows: `Test-Path documentation\memory-bank`
+    *   Unix: `test -d documentation/memory-bank`
+2.  **If Missing, Create All Necessary MB Directories and Files:**
+    *   **Create Directories (Batch):**
+        *   Windows (PowerShell): `mkdir -ErrorAction SilentlyContinue documentation\memory-bank, docs, docs\archive`
+        *   Mac/Linux (Bash): `mkdir -p documentation/memory-bank docs/archive`
+    *   **Create Core Memory Bank Files (Batch, refer to `memory-bank-paths.mdc` for full list):**
+        *   Windows (PowerShell): `$files = @(".cursorrules", "tasks.md", "documentation\memory-bank\projectbrief.md", "documentation\memory-bank\productContext.md", "documentation\memory-bank\systemPatterns.md", "documentation\memory-bank\techContext.md", "documentation\memory-bank\activeContext.md", "documentation\memory-bank\progress.md"); foreach ($file in $files) { if (-not (Test-Path $file)) { New-Item -Path $file -ItemType File -Force } }`
+        *   Mac/Linux (Bash): `touch .cursorrules tasks.md documentation/memory-bank/projectbrief.md documentation/memory-bank/productContext.md documentation/memory-bank/systemPatterns.md documentation/memory-bank/techContext.md documentation/memory-bank/activeContext.md documentation/memory-bank/progress.md`
+3.  **Populate Initial Templates:** If newly created, populate `tasks.md` and `activeContext.md` with their basic template content (as per `optimized-workflow-level1.mdc` example or `van-file-verification.mdc` if it were not removed).
+
+## 🔍 OPTIMIZED FILE VERIFICATION WORKFLOW (General Files)
+
+```mermaid
+graph TD
+    MainVerification["Start Full File Verification"] --> BatchVerify["Batch Verify All Required Components"]
+    BatchVerify --> MissingCheck{"Missing Components?"}
+    MissingCheck -->|"Yes"| BatchCreate["Batch Create Missing Items"]
+    MissingCheck -->|"No"| Complete["Verification Complete"]
+    BatchCreate --> Report["Generate Verification Report"]
+    Report --> Complete
+```
+
+## 📋 PERFORMANCE OPTIMIZATION BEST PRACTICES
+
+1.  **Batch Operations**: Always use batch operations instead of individual commands
+    ```
+    # GOOD: Create all directories at once
+    mkdir documentation\memory-bank docs docs\archive
+    
+    # BAD: Create directories one at a time
+    mkdir documentation\memory-bank
+    mkdir docs
+    mkdir docs\archive
+    ```
+
+2.  **Pre-Check Optimization**: Check all requirements first, then create only what's missing
+
+3.  **Error Handling**: Include error handling in all commands
+    ```
+    mkdir documentation\memory-bank, docs, docs\archive -ErrorAction SilentlyContinue
+    ```
+
+4.  **Platform Adaptation**: Auto-detect platform and use appropriate commands. (See `platform-awareness.mdc`)
+
+5.  **One-Pass Verification**: Verify directory structure in a single pass.
+
+## 📝 VERIFICATION REPORT FORMAT
+
+```
+✅ VERIFICATION COMPLETE
+- Created directories: [list or "None"]
+- Created files: [list or "None"]
+- All components verified.
+
+Memory Bank system ready for use.
+```
