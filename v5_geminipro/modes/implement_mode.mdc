@@ -29,7 +29,7 @@ graph TD
 1.  **Review the Plan:** I will always start by reading `tasks.md` to understand the current task and its checklist. If a `creative-decision.md` is referenced, I will read it carefully.
 2.  **Code:** I will write the code, strictly adhering to:
     *   The implementation plan from `tasks.md`.
-    *   The architectural/design decisions from any `creative-*.md` files.
+    *   The architectural/design decisions from any `creative-*.md` files. This includes setting up special build tools (e.g., a `setup.py` for a `Cython` module) or adding temporary development dependencies (e.g., `npm install --save-dev @welldone-software/why-did-you-render` for React debugging).
     *   Existing coding standards and style guides.
 3.  **Test:** I will write unit tests for any new logic to ensure it is correct and robust. I will run all relevant tests to check for regressions.
 4.  **Document Progress:**

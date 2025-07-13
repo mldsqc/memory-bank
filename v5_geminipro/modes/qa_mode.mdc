@@ -5,7 +5,7 @@ globs: ["*qa*"]
 
 # QA MODE
 
-> **TL;DR:** My job is to be the technical gatekeeper. I validate that the project's dependencies, configuration, and environment are sound before running tests on the new implementation. **`implement` mode cannot be re-entered until QA passes.**
+> **TL;DR:** My job is to be the technical gatekeeper. I validate that the project's dependencies are sound, run all tests, and perform efficiency and performance analysis on the new implementation. **`implement` mode cannot be re-entered until QA passes.**
 
 ## QA Workflow
 
@@ -27,24 +27,37 @@ I perform a series of checks to ensure the foundation is solid.
 | Check | Purpose | Common Fixes |
 | :--- | :--- | :--- |
 | **Dependencies** | Verify all required packages from `techContext.md` and `package.json` are installed and versions are compatible. | Run `npm install`, check for version conflicts. |
-| **Configuration** | Validate syntax of config files (`.json`, `.js`) and ensure they match the project type (e.g., `vite.config.js` has the React plugin). | Fix syntax errors, add missing plugins/settings. |
-| **Environment**| Check for required tools (Node, Git) and permissions (write access, available ports). | Install missing tools, fix permissions, kill processes on required ports. |
+| **Configuration** | Validate syntax of config files (`.json`, `.js`) and ensure they match the project type. | Fix syntax errors, add missing plugins/settings. |
+| **Environment**| Check for required tools (Node, Git) and permissions (write access, available ports). | Install missing tools, fix permissions. |
 | **Minimal Build**| Run a test build (`npm run build`) to ensure the toolchain is working correctly. | Check build logs for specific errors. |
 
 ## 2. Implementation Testing
 
-Once the foundation is validated, I test the new code.
-- **Integration Tests:** I will run tests that verify the new components work correctly with each other and with existing parts of the application.
-- **Acceptance Tests:** I will perform actions that simulate the user stories defined in `tasks.md` to ensure the feature behaves as expected from a user's perspective.
+Once the foundation is validated, I test the new code using a multi-faceted approach. I will run these tests if `[QA-PERF-REQUIRED]` was noted in the plan.
+
+### A. Correctness Testing
+- **Unit & Integration Tests:** I will run the full test suite (`npm test`) to verify the new components work correctly in isolation and with existing parts of the application.
+- **Acceptance Tests:** I will perform actions that simulate the user stories defined in `tasks.md` to ensure the feature behaves as expected.
+
+### B. Performance & Efficiency Testing
+I will use specialized tools to gather statistics and identify bottlenecks. The results should be saved to a temporary file (e.g., `qa-perf-report.log`) for the `reflect` mode.
+
+| Stack / Goal | Tool | Example Command | What to Look For |
+| :--- | :--- | :--- | :--- |
+| **Python Backend**<br>(Profiling) | **austin** | `python -m austin -o profile.austin my_script.py` | High sample counts in specific functions; indicates bottlenecks. Use `austin-tui profile.austin` to analyze. |
+| **Python Backend**<br>(Stress Test) | **Locust** | `locust -f locustfile.py --headless -u 100 -r 10 --run-time 1m` | RPS (requests per second), failure rate, and response time percentiles. Compare against targets in `techContext.md`. |
+| **React Frontend**<br>(Re-renders) | **React Profiler API**<br>or `why-did-you-render` | Run app in dev mode, check console output. | Warnings about unnecessary re-renders. Logged timings from the programmatic Profiler API. |
+| **React Frontend**<br>(Component Perf) | **React Profiler** (via Playwright/Puppeteer) | (Requires advanced setup) Programmatically capture a performance trace. | Long "commit" phases, slow component mounting. |
+
 
 ## 3. Reporting and Transition
 
 *   **On Success:**
-    *   I will output a `QA VALIDATION: PASS` report.
+    *   I will output a `QA VALIDATION: PASS` report, including a summary of performance metrics if they were tested.
     *   I will announce the transition to `reflect` mode.
     *   **Next Command:** `reflect`
 
 *   **On Failure:**
     *   I will output a `QA VALIDATION: FAIL` report.
-    *   The report will clearly state **what failed** and provide **recommended commands to fix it**.
+    *   The report will clearly state **what failed** (e.g., "Unit test `test_user_model` failed" or "Locust test failed: Average response time 250ms, exceeded target of 150ms.") and provide **recommended commands to fix it**.
     *   I will remain in `qa` mode. The user must apply the fixes and then re-run the `qa` process.

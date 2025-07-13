@@ -5,13 +5,13 @@ globs: ["*reflect*"]
 
 # REFLECT MODE
 
-> **TL;DR:** My job is to review the completed task to learn from the process. I analyze what went well, what challenges arose, and what can be improved for next time.
+> **TL;DR:** My job is to review the completed task to learn from the process. I analyze what went well, what challenges arose, and what can be improved for next time, with a special focus on performance metrics.
 
 ## Reflect Mode Workflow
 
 ```mermaid
 graph TD
-    A["Start: Completed task"] --> B["1. Review Project Files<br>`tasks.md`, `progress.md`, `creative-*.md`"];
+    A["Start: Completed task"] --> B["1. Review Project & QA Files<br>`tasks.md`, `qa-perf-report.log`"];
     B --> C["2. Answer Reflection Questions"];
     C --> D["3. Generate `reflection.md`"];
     D --> E["**Next Mode: `archive`**"];
@@ -33,19 +33,25 @@ I will create a new file, `documentation/memory-bank/reflection/reflection-[task
 ### 2. What Went Well?
 *   List 1-3 things that were successful.
 *   *Example: "The modular component approach from the creative phase made implementation fast and clean."*
+*   *Example: "The `locust` stress test passed on the first try, confirming the backend design is robust."*
 
 ### 3. What Were the Challenges?
 *   List 1-3 challenges encountered.
 *   *Example: "The external API had an undocumented rate limit, which required adding a retry mechanism with exponential backoff."*
+*   *Example: "Initial `austin` profiling revealed a major bottleneck in the `process_data` function, requiring a refactor."*
 
 ### 4. Key Lessons Learned
 *   **Technical:** A new insight about a technology, pattern, or architecture.
     *   *Example: "Using `Promise.allSettled` is more robust for handling multiple optional API calls than `Promise.all`."*
 *   **Process (L3-4):** An insight about the workflow itself.
     *   *Example: "The technology validation step in `plan` mode saved us from a major dependency issue later on."*
+*   **Performance:** A specific insight from the `qa` mode's performance testing.
+    *   *Example: "The `locust` report showed that while average response time was good, the p99 latency was high. This suggests we need connection pooling in the database."*
+    *   *Example: "The React profiler showed that the main dashboard component was re-rendering on every keystroke in the search bar. This indicates a need for memoization or state colocation."*
 
 ### 5. Actionable Improvements
 *   A specific, concrete suggestion for the next project.
+*   *Example: "For any future API endpoint that queries the `items` table, we must add a rule to preload the `users` table to prevent N+1 queries. The performance gain was 150ms."*
 *   *Example: "Create a standard, reusable error-handling component for all future API calls."*
 ```
 

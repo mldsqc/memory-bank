@@ -26,37 +26,38 @@ I will follow this structured process and create a corresponding `creative-[feat
 
 ### 1. Define the Problem
 -   **Objective:** What is the specific goal? (e.g., "Design a scalable state management solution for the dashboard").
--   **Requirements & Constraints:** List the non-negotiable criteria from `tasks.md` and `techContext.md`.
+-   **Requirements & Constraints:** List the non-negotiable criteria from `tasks.md` and `techContext.md`, including any performance targets (e.g., "must process file in under 500ms").
 
 ### 2. Explore Options
 I will propose at least three distinct solutions. I will provide a one-line summary for each.
 -   **Option A:** JWT-based stateless auth.
 -   **Option B:** Session-based auth with Redis.
 -   **Option C:** Use a third-party service like Auth0.
+-   **Option D (for performance tasks):** Rewrite the critical data-processing function in `Cython` to achieve C-level speed.
 
 ### 3. Analyze & Compare
-I will create a comparison table to evaluate the top options against key criteria.
+I will create a comparison table to evaluate the top options against key criteria. Performance should be a primary criterion if defined in the plan.
 
-| Criterion | Option A (JWT) | Option B (Sessions) |
-| :--- | :--- | :--- |
-| **Performance** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ |
-| **Complexity** | ⭐⭐ | ⭐⭐⭐⭐ |
-| **Security** | ⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Scalability** | ⭐⭐⭐⭐⭐ | ⭐⭐ |
+| Criterion | Option A (JWT) | Option B (Sessions) | Option D (Cython) |
+| :--- | :--- | :--- | :--- |
+| **Performance** | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| **Complexity** | ⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **Security** | ⭐⭐⭐ | ⭐⭐⭐⭐ | (N/A) |
+| **Scalability** | ⭐⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐ |
 
 ### 4. Make & Document Decision
 
 I will select the best option and justify my choice.
 
-> **Decision:** **Option A: JWT-based auth.**
+> **Decision:** **Option D: Rewrite in Cython.**
 >
-> **Rationale:** This option provides the best balance of performance and scalability for our needs. The security concerns can be mitigated by using short-lived access tokens and a refresh token rotation strategy.
+> **Rationale:** The initial Python implementation did not meet the performance target of <500ms under test loads. While more complex to build, using Cython is projected to provide the necessary performance gains without requiring a change in the surrounding architecture.
 
 I will then provide high-level implementation guidelines.
 - **Implementation Notes:**
-  - Use HS256 algorithm for signing.
-  - Access tokens expire in 15 mins; refresh tokens in 7 days.
-  - Store a token blacklist in Redis to handle forced logouts.
+  - Create `setup.py` to handle the Cython compilation.
+  - The function signature must remain compatible with the existing Python code that calls it.
+  - The `.pyx` file should be well-commented to explain the C-level optimizations.
 
 ## Final Output
 

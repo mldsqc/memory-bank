@@ -12,7 +12,7 @@ globs: ["*plan*"]
 ```mermaid
 graph TD
     A["Start: Task from `van` mode"] --> B["1. Define Requirements & Components"];
-    B --> C["2. Technology Validation"];
+    B --> C["2. Tech & Performance Validation"];
     C --> D["3. Create Implementation Steps"];
     D --> E{"4. Identify Need for<br>Creative Design?"};
     E --> |Yes| F["Flag for `creative` mode"];
@@ -28,12 +28,13 @@ I will flesh out the task by:
 -   **Identifying Components:** Which files, classes, or modules will be created or modified?
 -   **Mapping Dependencies:** How do the components interact with each other and the existing system?
 
-## 2. Technology Validation (Mandatory Gate)
+## 2. Tech & Performance Validation (Mandatory Gate)
 
-If new technologies (libraries, frameworks) are required, I must validate them **before** finalizing the plan.
-1.  **Research:** Use available tools to research the technology.
+If new technologies are required, I must validate them. I must also define performance requirements if the task involves data processing, API endpoints, or complex UI rendering.
+1.  **Research:** Use available tools to research new technologies.
 2.  **Proof of Concept (PoC):** Create a minimal "Hello World" to verify the build process, dependencies, and configuration.
-3.  **Document:** Record the chosen stack and PoC findings in `techContext.md`.
+3.  **Define Performance Targets:** If applicable, state a measurable goal. (e.g., "API endpoint must respond in <200ms under 50 concurrent users.", "React component must render in <50ms without unnecessary re-renders.").
+4.  **Document:** Record the chosen stack, PoC findings, and performance targets in `techContext.md`.
 
 ## 3. Create Implementation Steps
 
@@ -46,6 +47,7 @@ I will update `tasks.md` with a detailed, hierarchical checklist.
 ## Requirements
 - [ ] Users can view their email and username.
 - [ ] Users can upload a new profile picture.
+- [ ] API `GET /api/user/profile` must respond in < 150ms.
 
 ## Implementation Plan
 
@@ -53,12 +55,14 @@ I will update `tasks.md` with a detailed, hierarchical checklist.
 - [ ] Create `GET /api/user/profile` endpoint.
 - [ ] Create `POST /api/user/avatar` endpoint for uploads.
 - [ ] Add unit tests for both endpoints.
+- [ ] **[QA-PERF-REQUIRED]** Stress test endpoints with `locust`.
 
 ### Phase 2: Frontend Component
 - [ ] Create `UserProfile.jsx` component.
 - [ ] Fetch and display user data.
 - [ ] Build the file upload UI.
 - [ ] Add state management for loading/error states.
+- [ ] **[QA-PERF-REQUIRED]** Profile the component for re-renders.
 ```
 
 ## 4. Identify Need for Creative Design
@@ -68,6 +72,7 @@ For each component, I will assess if the solution is straightforward or requires
     -   The architecture is non-trivial.
     -   A new, complex UI/UX flow is needed.
     -   A complex algorithm must be designed.
+    -   A defined performance target likely cannot be met with a standard implementation.
 -   **Action:** If `creative` is needed, I will add a `[CREATIVE-REQUIRED]` tag to that step in `tasks.md`.
 
 ## 5. Transition to Next Mode
